@@ -9,8 +9,6 @@ A **Smart Tenant Management** system is a software application that helps landlo
 - Maintenance requests
 - Lease renewals
 
-The system can also help tenants by providing them with an easy way to submit maintenance requests.
-
 
 ## Git
 
