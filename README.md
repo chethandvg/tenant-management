@@ -4,22 +4,12 @@
 
 # Smart Tenant Management
 
-A **Smart Tenant Management** system is a software application that helps landlords and property managers manage their rental properties and tenants. It simplifies the process of managing rental properties by automating tasks such as:
-- Managing rental records
-- Maintenance requests
-- Lease renewals
-
-
-## Git
-
-Use of Github for maintaining ticket system and PR's
-- [Github board](https://github.com/chethandvg)
-- [Commit history](https://github.com/users/chethandvg/projects/1)
+A **Smart Tenant Management** app is a mobile application that helps landlords and property managers manage their rental properties and tenants. It simplifies the process by automating the task of managing rental records, also generates a graph view to understand expense and gain for each property. 
 
 
 ## Tech Stack
 
-**APP:** MAUI Blazor, MudBlazor, C#, Dot Net 6.0, JavaScript, HTML, CSS
+[![MAUI Blazor](https://img.shields.io/badge/MAUI%20Blazor-v6.0-purple.svg)](https://learn.microsoft.com/en-us/aspnet/core/blazor/hybrid/tutorials/maui?view=aspnetcore-6.0)[![MudBlazor](https://img.shields.io/badge/MudBlazor-v6.11.0-purple.svg)](https://mudblazor.com/)[![C#](https://img.shields.io/badge/C%23-v11.0-purple.svg)](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-11)[![Dot Net](https://img.shields.io/badge/Dot%20Net-v6.0-purple.svg)](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-11)[![HTML](https://img.shields.io/badge/HTML-v5.0-d25837.svg)][![CSS](https://img.shields.io/badge/CSS-v5.0-4e9cd3.svg)][![JavaScript](https://img.shields.io/badge/JavaScript-yellow.svg)]
 
 
 ## Supported Platforms
@@ -33,6 +23,17 @@ Use of Github for maintaining ticket system and PR's
  
  ### Required packages for VS 2022
   - .NET Multi-platform App Ul development ([Installation Procedure](https://dotnet.microsoft.com/en-us/learn/maui/first-app-tutorial/install))
+
+## Git
+
+Use of Github for maintaining ticket system and PR's
+- [Github board](https://github.com/chethandvg)
+- [Commit history](https://github.com/users/chethandvg/projects/1)
+
+
+## Stats
+
+![Alt](https://repobeats.axiom.co/api/embed/684a449d63c075c48b449b84a1f667a4d73b07e8.svg "Repobeats analytics image")
 
 
 ## Acknowledgements
@@ -67,5 +68,8 @@ Hi there, I am Chethan. I'm a full-stack developer and also student at SRH Berli
 - Azure
 - C#
 - Dot Net
+- Contentful
+- CommerceTools
+- Algolia
 - HTML, CSS, JavaScript
 
