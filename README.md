@@ -4,7 +4,7 @@
 
 # Smart Tenant Management
 
-A **Smart Tenant Management** app is a mobile application that helps landlords and property managers manage their rental properties and tenants. It simplifies the process by automating the task of managing rental records, also generates a graph view to understand expense and gain for each property. 
+A **Smart Tenant Management** app is a mobile application that helps landlords and property managers manage their rental properties and tenants. It simplifies the process by automating the task of managing rental records and also generates a graph view to understand expense and gain for each property. 
 
 
 ## Tech Stack
@@ -19,7 +19,7 @@ A **Smart Tenant Management** app is a mobile application that helps landlords a
 
 ## IDE
 
- - Visual Studio Community 2022 (Version :- 17.7.5 or above)
+ - Visual Studio Community 2022 (Version :- 17.7.5)
  
  ### Required packages for VS 2022
   - .NET Multi-platform App Ul development ([Installation Procedure](https://dotnet.microsoft.com/en-us/learn/maui/first-app-tutorial/install))
@@ -27,8 +27,8 @@ A **Smart Tenant Management** app is a mobile application that helps landlords a
 ## Git
 
 Use of Github for maintaining ticket system and PR's
-- [Github board](https://github.com/chethandvg)
-- [Commit history](https://github.com/users/chethandvg/projects/1)
+- [Github board](https://github.com/users/chethandvg/projects/1)
+- [Commit history](https://github.com/chethandvg/tenant-management/pulls)
 
 
 ## Stats
