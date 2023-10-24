@@ -9,17 +9,33 @@ A **Smart Tenant Management** system is a software application that helps landlo
 - Maintenance requests
 - Lease renewals
 
-The system can also help tenants by providing them with an easy way to submit maintenance requests, communicate with their landlord or property manager, and also pay rent which will be implemented later.
+The system can also help tenants by providing them with an easy way to submit maintenance requests.
 
 
-## Authors
+## Git
 
-- [@chethan](https://github.com/chethandvg)
+Use of Github for maintaining ticket system and PR's
+- [Github board](https://github.com/chethandvg)
+- [Commit history](https://github.com/users/chethandvg/projects/1)
 
 
 ## Tech Stack
 
-**APP:** MAUI Blazor, MudBlazor, JavaScript, HTML, CSS, C#, Dot Net
+**APP:** MAUI Blazor, MudBlazor, C#, Dot Net 6.0, JavaScript, HTML, CSS
+
+
+## Supported Platforms
+
+ - Android
+
+
+## IDE
+
+ - Visual Studio Community 2022 (Version :- 17.7.5 or above)
+ 
+ ### Required packages for VS 2022
+  - .NET Multi-platform App Ul development ([Installation Procedure](https://dotnet.microsoft.com/en-us/learn/maui/first-app-tutorial/install))
+
 
 ## Acknowledgements
 
@@ -30,9 +46,10 @@ The system can also help tenants by providing them with an easy way to submit ma
  - [.Net MAUI](https://learn.microsoft.com/en-us/aspnet/core/blazor/hybrid/tutorials/maui?view=aspnetcore-6.0)
 
 
-## Supported Platforms
+## Authors
 
- - Android
+- [@chethan](https://github.com/chethandvg)
+
 
 ## 🚀 About Me
 Hi there, I am Chethan. I'm a full-stack developer and also student at SRH Berlin University of Applied Sciences. Currently, I am pursuing my Masters in Computer Science | Big Data & Artificial Intelligence. 
