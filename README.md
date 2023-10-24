@@ -14,7 +14,7 @@ A **Smart Tenant Management** app is a mobile application that helps landlords a
 
 ## Supported Platforms
 
- - Android
+ - Android 7.0 (API 24) or higher is required
 
 
 ## IDE
