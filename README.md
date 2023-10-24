@@ -9,7 +9,7 @@ A **Smart Tenant Management** app is a mobile application that helps landlords a
 
 ## Tech Stack
 
-[![MAUI Blazor](https://img.shields.io/badge/MAUI%20Blazor-v6.0-purple.svg)](https://learn.microsoft.com/en-us/aspnet/core/blazor/hybrid/tutorials/maui?view=aspnetcore-6.0)[![MudBlazor](https://img.shields.io/badge/MudBlazor-v6.11.0-purple.svg)](https://mudblazor.com/)[![C#](https://img.shields.io/badge/C%23-v11.0-purple.svg)](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-11)[![Dot Net](https://img.shields.io/badge/Dot%20Net-v6.0-purple.svg)][![HTML](https://img.shields.io/badge/HTML-v5.0-d25837.svg)][![CSS](https://img.shields.io/badge/CSS-v5.0-4e9cd3.svg)][![JavaScript](https://img.shields.io/badge/JavaScript-yellow.svg)]
+[![MAUI Blazor](https://img.shields.io/badge/MAUI%20Blazor-v6.0-purple.svg)](https://learn.microsoft.com/en-us/aspnet/core/blazor/hybrid/tutorials/maui?view=aspnetcore-6.0)[![MudBlazor](https://img.shields.io/badge/MudBlazor-v6.11.0-purple.svg)](https://mudblazor.com/)[![C#](https://img.shields.io/badge/C%23-v11.0-purple.svg)](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-11)[![Dot Net](https://img.shields.io/badge/Dot%20Net-v6.0-purple.svg)](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-6)![HTML](https://img.shields.io/badge/HTML-v5.0-d25837.svg)![CSS](https://img.shields.io/badge/CSS-v5.0-4e9cd3.svg)![JavaScript](https://img.shields.io/badge/JavaScript-yellow.svg)
 
 
 ## Supported Platforms
