@@ -19,17 +19,19 @@ A **Smart Tenant Management** app is a mobile application that helps landlords a
 
 ## IDE
 
- - Visual Studio Community 2022 (Version :- 17.7.5)
+ - Visual Studio Community 2022 (Version :- 17.7.5).
  
- ### Required packages for VS 2022
-  - .NET Multi-platform App Ul development ([Installation Procedure](https://dotnet.microsoft.com/en-us/learn/maui/first-app-tutorial/install))
+	### Required packages for VS 2022
+	- .NET Multi-platform App Ul development ([Installation Procedure](https://dotnet.microsoft.com/en-us/learn/maui/first-app-tutorial/install)).
 
 ## Git
 
-Use of Github for maintaining ticket system and PR's
+Github used for maintaining ticket system and PR's
 - [Github board](https://github.com/users/chethandvg/projects/1)
 - [Commit history](https://github.com/chethandvg/tenant-management/pulls)
 
+	### GUI Git Client
+	- [Sourcetree](https://www.sourcetreeapp.com/) was used to make git operation much simple and also to get an easy view on previous git operation via various branches.
 
 ## Stats
 
@@ -38,11 +40,11 @@ Use of Github for maintaining ticket system and PR's
 
 ## Acknowledgements
 
- - [C# Intro](https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/)
- - [Dot Net](https://dotnet.microsoft.com/en-us/)
- - [Blazor](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor)
- - [MudBlazor](https://mudblazor.com/)
- - [.Net MAUI](https://learn.microsoft.com/en-us/aspnet/core/blazor/hybrid/tutorials/maui?view=aspnetcore-6.0)
+ - [C# Intro](https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/).
+ - [Dot Net](https://dotnet.microsoft.com/en-us/).
+ - [Blazor](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor).
+ - [MudBlazor](https://mudblazor.com/).
+ - [.Net MAUI](https://learn.microsoft.com/en-us/aspnet/core/blazor/hybrid/tutorials/maui?view=aspnetcore-6.0).
 
 
 ## Authors
