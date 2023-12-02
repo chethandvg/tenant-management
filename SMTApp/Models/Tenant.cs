@@ -1,4 +1,4 @@
-﻿namespace SMTApp.Models;;
+﻿namespace SMTApp.Models;
 
 internal class Tenant
 {

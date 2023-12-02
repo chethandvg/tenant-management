@@ -1,0 +1,358 @@
+@page "/"
+@using System.IO;
+@using System.Text.Json;
+@using System.Globalization;
+@inject IDialogService DialogSrc
+@inject NavigationManager NavMng
+@inject ISnackbar _snack
+
+<PageTitle>Daily Report</PageTitle>
+
+<style>
+    .mud-table-row .mud-table-cell:last-child {
+        border-bottom: 5px solid !important
+    }
+</style>
+<MudGrid>
+    <MudItem xs="12">
+        <MudPaper Elevation="25" Class="py-3">
+            <MudToolBar>
+                <MudSelect Placeholder="Select Building" @bind-Value="SelectedBuilding" CloseIcon="@Icons.Material.Filled.Flag" AdornmentColor="Color.Tertiary"
+                           AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.CenterCenter" Immediate=true>
+                    @foreach (var building in buildings)
+                    {
+                        <MudSelectItem Value="Path.GetFileName(building)" />
+                    }
+                </MudSelect>
+                <MudSpacer />
+                <MudFab StartIcon="@Icons.Material.Filled.Add" Label="Add" Color="Color.Primary" OnClick="AddBuilding" />
+            </MudToolBar>
+        </MudPaper>
+    </MudItem>
+    @if (displayRoomsTable && !string.IsNullOrEmpty(selectedBuilding))
+    {
+        <MudItem xs="12">
+            <MudPaper>
+                <MudTable ServerData="@(new Func<TableState, Task<TableData<Room>>>(RoomsTable))" @ref="table" Hover=true
+                      Striped=true>
+                    <ToolBarContent>
+                        <MudText Typo="Typo.h6">Rooms</MudText>
+                        <MudSpacer />
+                        <MudFab StartIcon="@Icons.Material.Filled.Add" Label="Add Room" Color="Color.Primary" OnClick="AddRoom" />
+                    </ToolBarContent>
+                    <HeaderContent>
+                        <MudTh>Room </MudTh>
+                        <MudTh>Tenant</MudTh>
+                        <MudTh>Balance</MudTh>
+                        <MudTh>Actions</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Room">@context?.RoomName</MudTd>
+                        <MudTd DataLabel="Tenant">@context?.Tennant?.Name</MudTd>
+                        <MudTd DataLabel="Balance">@(context?.Balance ?? 0)</MudTd>
+                            <MudTd DataLabel="Actions">
+                                <MudIconButton Icon="@Icons.Material.Filled.Edit" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" OnClick="()=>NavigateToEditPage(context.RoomName)" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Error" Size="Size.Large" OnClick="()=>DeleteRoom(context.RoomName)" />
+                            </MudTd>
+                        </RowTemplate>
+                        <NoRecordsContent>
+                            <MudText>No Rooms in this building</MudText>
+                        </NoRecordsContent>
+                        <LoadingContent>
+                            <MudText>Loading...</MudText>
+                        </LoadingContent>
+                        <PagerContent>
+                            <MudTablePager />
+                        </PagerContent>
+                    </MudTable>
+                </MudPaper>
+            </MudItem>
+        <MudItem xs="12" Style="text-align:center">
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="DeleteBuilding">Delete Bulding</MudButton>
+        </MudItem>
+    }
+</MudGrid>
+<MudMessageBox @ref="mbox" Title="Warning" CancelText="Cancel">
+    <MessageContent>
+        Deleting can <b><i>not</i></b> be undone!
+    </MessageContent>
+    <YesButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Material.Filled.DeleteForever">Delete!</MudButton>
+    </YesButton>
+</MudMessageBox>
+
+@code {
+
+    MudSwipeArea _swipeArea;
+    SwipeDirection _swipeDirection;
+    bool _preventDefault = true;
+    int _sensitivity = 100;
+    double? _swipeDelta;
+
+
+    List<string> buildings = new();
+    List<string> rooms = new();
+    private string selectedBuilding;
+    string SelectedBuilding { get { return selectedBuilding; } set { selectedBuilding = value; DisplayTable(); } }
+    string selectedRoom { get; set; }
+    bool displayRoomsTable = false;
+    MudMessageBox mbox { get; set; }
+    MudTable<Room> table;
+
+    protected override void OnInitialized()
+    {
+        var files = GetDirectories(FileSystem.Current.AppDataDirectory);
+        if (!files.Contains(System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, ConstantValues.HouseData)))
+            Directory.CreateDirectory(System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, ConstantValues.HouseData));
+
+        mainPath = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, ConstantValues.HouseData);
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            buildings = GetBuildings();
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    void GetTenantDetails(Room roomDetails, string roomPath)
+    {
+        try
+        {
+            var tenantsFolderPath = System.IO.Path.Combine(roomPath, ConstantValues.TenantsFolder);
+            var files = GetFiles(tenantsFolderPath);
+            List<string> tenantsGuid = new();
+            if (files.Any())
+            {
+                tenantsGuid = files.Select(x => Path.GetFileNameWithoutExtension(x)).ToList();
+            }
+            List<Tenant> tenants = new();
+            foreach (var tenantTxtFile in tenantsGuid)
+            {
+                var filePath = Path.Combine(tenantsFolderPath, tenantTxtFile + ".txt");
+                if (files.Contains(filePath))
+                {
+                    var tenantDetails = File.ReadAllText(filePath);
+                    try
+                    {
+                        tenants.Add(JsonSerializer.Deserialize<Tenant>(tenantDetails));
+                    }
+                    catch { }
+                }
+            }
+            roomDetails.Tennant = tenants.FirstOrDefault(x => x.PresentTenant);
+            roomDetails.BorrowedMoney = roomDetails.Tennant.BorrowedMoney.Sum(x => (x.Amount ?? 0)) - roomDetails.Tennant.Payments.Sum(x => (x.Amount ?? 0));
+            var last_payment = roomDetails.Tennant.Payments.OrderByDescending(x => x.PaymentDate).First();
+            if (roomDetails.LastPaidDate == null || roomDetails.LastPaidDate < last_payment.PaymentDate)
+            {
+                roomDetails.LastPaidAmount = last_payment.Amount;
+                roomDetails.LastPaidDate = last_payment.PaymentDate;
+            }
+        }
+        catch
+        {
+        }
+    }
+
+    private void NavigateToEditPage(string roomName)
+    {
+        NavMng.NavigateTo("/" + selectedBuilding + "/" + roomName + "/roompage");
+    }
+    private async void DisplayTable()
+    {
+        if (!string.IsNullOrEmpty(selectedBuilding))
+        {
+            displayRoomsTable = true;
+            await InvokeAsync(StateHasChanged);
+            await Task.Delay(100);
+            await table.ReloadServerData();
+        }
+    }
+    private async Task<TableData<Room>> RoomsTable(TableState state)
+    {
+        if (string.IsNullOrEmpty(selectedBuilding))
+            return new()
+                {
+                    Items = new List<Room>(),
+                    TotalItems = 0
+                };
+
+        rooms = GetRooms(selectedBuilding);
+        if (rooms == null || (!rooms.Any()))
+            return new()
+                {
+                    Items = new List<Room>(),
+                    TotalItems = 0
+                };
+
+        var roomDetails = new List<Room>();
+        foreach (var room in rooms)
+        {
+            if (!string.IsNullOrEmpty(room))
+            {
+                var details = GetRoomDetails(room);
+                await GetRentDetails(details, room);
+
+                if (details != null)
+                    roomDetails.Add(details);
+            }
+        }
+
+        await InvokeAsync(StateHasChanged);
+        return new()
+            {
+                Items = roomDetails,
+                TotalItems = roomDetails.Count
+            };
+    }
+
+    async Task GetRentDetails(Room roomDetails, string roomPath)
+    {
+        try
+        {
+            var detailfilesPath = System.IO.Path.Combine(roomPath, ConstantValues.DetailFiles);
+            var rentDetailfilePath = System.IO.Path.Combine(detailfilesPath, ConstantValues.RentDetails);
+            List<int> folders = new();
+            var files = GetDirectories(rentDetailfilePath);
+            double rntBalance = 0;
+            if (files.Any())
+            {
+                folders = files.Select(x => int.Parse(Path.GetFileNameWithoutExtension(x))).ToList(); //all year folder names
+                folders = folders.OrderByDescending(c=>c).ToList(); // arrange year folder in descending order
+                foreach (var eachFolder in folders)
+                {
+                    var tempYearPath = System.IO.Path.Combine(rentDetailfilePath, eachFolder.ToString()); //each path of year folder
+                    files = GetDirectories(tempYearPath);//get all folders in this year path
+                    if (files.Any())
+                    {
+                        var tempFolders = files.Select(x =>
+                        DateTime.ParseExact(Path.GetFileNameWithoutExtension(x), "MMMM", CultureInfo.CurrentCulture).Month
+                        ).ToList();//get names of each month folders and get numeric value of that month
+                        var newTempFolders = tempFolders.OrderByDescending(x=>x);// arrange months in descending order
+                        foreach (var eachMonth in newTempFolders)
+                        {
+                            var tempMonthPath = files[tempFolders.IndexOf(eachMonth)];
+                            var monthFiles = GetFiles(tempMonthPath);// get all files in each month path
+                            if (monthFiles.Contains(Path.Combine(tempMonthPath, ConstantValues.FileNames.RentTxtFile)))
+                            {
+                                if (monthFiles.Contains(Path.Combine(tempMonthPath, ConstantValues.FileNames.PaymentDetailsTxt)))
+                                {
+                                    var txt = await File.ReadAllTextAsync(Path.Combine(tempMonthPath, ConstantValues.FileNames.PaymentDetailsTxt));
+                                    var rentPaymentDetails = JsonSerializer.Deserialize<RentPaymentDetails>(txt);
+                                    rntBalance += rentPaymentDetails.Balance ?? 0;
+                                    if (rentPaymentDetails.AllPayments.Any())
+                                    {
+                                        var latestPayment = rentPaymentDetails.AllPayments.MaxBy(x => x.PaymentDate);
+                                        if (roomDetails.LastPaidDate == null || roomDetails.LastPaidDate < latestPayment.PaymentDate)
+                                        {
+                                            roomDetails.LastPaidDate = latestPayment.PaymentDate;
+                                            roomDetails.LastPaidAmount = latestPayment.Amount;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            GetTenantDetails(roomDetails, roomPath);
+            UpdateRoomBalance(roomDetails, rntBalance);
+        }
+        catch
+        {
+
+        }
+    }
+
+    void UpdateRoomBalance(Room roomDetails, double rntBalance)
+    {
+        roomDetails.Balance = rntBalance + (roomDetails.BorrowedMoney ?? 0);
+    }
+
+    async void DeleteRoom(string roomName)
+    {
+        try
+        {
+            bool? result = await mbox.Show();
+            if (result != null && result == true)
+            {
+                var buildingPath = System.IO.Path.Combine(mainPath, selectedBuilding);
+                Directory.Delete(System.IO.Path.Combine(buildingPath, roomName), true);
+                await table.ReloadServerData();
+                _snack.Add("Room deleted successfully", Severity.Success);
+            }
+        }
+        catch
+        {
+            _snack.Add("Something Went Wrong", Severity.Error);
+        }
+    }
+    async void DeleteBuilding()
+    {
+        try
+        {
+            bool? result = await mbox.Show();
+            if (result != null && result == true)
+            {
+                Directory.Delete(System.IO.Path.Combine(mainPath, selectedBuilding), true);
+                buildings = GetBuildings();
+                selectedBuilding = string.Empty;
+                StateHasChanged();
+                _snack.Add("Building deleted successfully", Severity.Success);
+            }
+        }
+        catch
+        {
+            _snack.Add("Something Went Wrong", Severity.Error);
+        }
+    }
+
+    private async Task AddBuilding()
+    {
+        try
+        {
+            var result = await OpenDialog("Add Building");
+            if (!result.Canceled)
+            {
+                string newPath = System.IO.Path.Combine(mainPath, result.Data.ToString());
+                Directory.CreateDirectory(newPath);
+            }
+            buildings = GetBuildings();
+            _snack.Add("Building Added successfully", Severity.Success);
+        }
+        catch
+        {
+            _snack.Add("Something Went Wrong", Severity.Error);
+        }
+    }
+
+    private async Task AddRoom()
+    {
+        try
+        {
+            var result = await OpenDialog("Add Room");
+            if (result != null && !result.Canceled)
+            {
+                var buildingpath = System.IO.Path.Combine(mainPath, selectedBuilding);
+                string newPath = System.IO.Path.Combine(buildingpath, result.Data.ToString());
+                Directory.CreateDirectory(newPath);
+                Directory.CreateDirectory(System.IO.Path.Combine(newPath, ConstantValues.DetailFiles));
+            }
+            await table.ReloadServerData();
+            _snack.Add("Room deleted successfully", Severity.Success);
+        }
+        catch
+        {
+            _snack.Add("Something Went Wrong", Severity.Error);
+        }
+    }
+
+    private async Task<DialogResult> OpenDialog(string title)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true };
+        var dialog = await DialogSrc.ShowAsync<AddRoomOrBuildingDialog>(title, options);
+        return await dialog.Result;
+    }
+}
