@@ -1,0 +1,24 @@
+<MudDialog>
+    <DialogContent>
+        <MudGrid>
+            <MudItem xs="12">
+                <MudTextField @bind-Value="name" Label="Name" Variant="Variant.Outlined" Adornment="Adornment.End" Immediate=true AdornmentIcon="@Icons.Material.Filled.House" AdornmentColor="Color.Primary" />
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    string name = string.Empty;
+    void Submit()
+    {
+        if (!string.IsNullOrEmpty(name))
+            MudDialog.Close(DialogResult.Ok(name));
+    }
+    void Cancel() => MudDialog.Cancel();
+}
