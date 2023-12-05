@@ -35,7 +35,7 @@ Github used for maintaining ticket system and PR's
 
 ## Stats
 
-![Alt](https://repobeats.axiom.co/api/embed/51d1bbc0563dca178e900205bc648962a45b02de.svg "Repobeats analytics image")
+![Alt](https://repobeats.axiom.co/api/embed/e0a5078d71614877b81748924114cc30946c37e4.svg "Repobeats analytics image")
 
 
 ## Acknowledgements
