@@ -19,22 +19,22 @@
                 <MudField Label="Room Name" Variant="Variant.Outlined">
                     @Room
                 </MudField>
-                <MudField Label="Advance amount" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.CurrencyRupee" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
+                <MudField Label="Advance amount" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Euro" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
                     @roomDetails.AdvanceAmount
                 </MudField>
-                <MudField Label="Monthly Rent" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.CurrencyRupee" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
+                <MudField Label="Monthly Rent" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Euro" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
                     @roomDetails.RentAmount
                 </MudField>
-                <MudField Label="Lease amount" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.CurrencyRupee" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
+                <MudField Label="Lease amount" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Euro" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
                     @roomDetails.LeaseAmount
                 </MudField>
-                <MudField Label="Borrowed money" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.CurrencyRupee" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
+                <MudField Label="Borrowed money" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Euro" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
                     @(roomDetails.BorrowedMoney ?? 0)
                 </MudField>
-                <MudField Label="Balance" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.CurrencyRupee" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
+                <MudField Label="Balance" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Euro" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
                     @(roomDetails.Balance ?? 0)
                 </MudField>
-                <MudField Label="Last paid Amount" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.CurrencyRupee" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
+                <MudField Label="Last paid Amount" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Euro" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
                     @((roomDetails.LastPaidAmount ?? 0).ToString("0.##"))
                 </MudField>
                 <MudField Label="Last paid Date" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.CalendarMonth" Adornment="Adornment.End" AdornmentColor="Color.Primary">
@@ -48,13 +48,13 @@
                 </MudField>
                 <MudField Label="Last Month Electricity bill" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.ElectricalServices" AdornmentColor="Color.Primary" OnAdornmentClick="ViewElectricityBill">
                     @(
-                        latestYearFolder != 0 ? (roomDetails.ElectricityBill.Amount ?? 0).ToString() + "  " + latestMonthFolder + "/" + latestYearFolder.ToString() : string.Empty
+                        latestYearFolder != 0 ? "€" + (roomDetails.ElectricityBill.Amount ?? 0).ToString() + ",  " + latestMonthFolder + "/" + latestYearFolder.ToString() : string.Empty
                         )
                 </MudField>
                 <MudField Label="Last Month Water bill" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.WaterDrop" AdornmentColor="Color.Primary" OnAdornmentClick="ViewWaterBill">
 
                     @(
-                        latestYearFolder != 0 ? (roomDetails.WaterBill.Amount ?? 0).ToString() + "  " + latestMonthFolder + "/" + latestYearFolder.ToString() : string.Empty
+                        latestYearFolder != 0 ? "€" + (roomDetails.WaterBill.Amount ?? 0).ToString() + "  " + latestMonthFolder + "/" + latestYearFolder.ToString() : string.Empty
                         )
                 </MudField>
                 <MudField Label="Rent start date" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.CalendarMonth" Adornment="Adornment.End" AdornmentColor="Color.Primary">
