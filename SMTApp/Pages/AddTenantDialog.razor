@@ -1,0 +1,390 @@
+@inject ISnackbar _snack;
+
+<MudDialog DisableSidePadding="true">
+    <DialogContent>
+        <MudContainer Style="max-height:630px; overflow-y: scroll">
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudPaper Class="pa-3">
+                        <MudOverlay Visible="isLoading" DarkBackground="true" Absolute="true">
+                            <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+                        </MudOverlay>
+                        <MudGrid>
+                            <MudItem xs="12">
+                                <MudTextField @bind-Value="tenant.Name" Variant="Variant.Outlined" Immediate=true Label="Name" />
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudTextField @bind-Value="tenant.AadharNumber" Variant="Variant.Outlined" Immediate=true Label="Aadhar Number" />
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudTextField @bind-Value="tenant.PanNumber" Variant="Variant.Outlined" Immediate=true Label="Pan Number" />
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudTextField @bind-Value="tenant.NumberOfResidents" Variant="Variant.Outlined" Immediate=true Label="Number Of Residents" />
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudDatePicker PickerVariant="PickerVariant.Dialog" Label="Tenant Start Date" @bind-Date="tenant.StartDate" DateFormat="dd/MMMM/yyyy" />
+                            </MudItem>
+
+                            @*Tenant Image*@
+                            <MudText Typo="Typo.h6">
+                                Add Tenant Image
+                            </MudText>
+                            <MudItem xs="12">
+                                <MudImage Src="@tenantImage" Fluid=true Class="rounded-lg" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.Image"
+                                           OnClick="UploadTenantImage">
+                                    Upload Image
+                                </MudButton>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.Camera"
+                                           OnClick="CaptureTenantImage">
+                                    Capture Image
+                                </MudButton>
+                            </MudItem>
+
+                            @*Tenant Aadhar Image*@
+                            <MudText Typo="Typo.h6">
+                                Add Aadhar Image
+                            </MudText>
+                            <MudItem xs="12">
+                                <MudImage Src="@tenantAadharImage" Fluid=true Class="rounded-lg" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.Image"
+                                           OnClick="UploadTenantAadhar">
+                                    Upload Image
+                                </MudButton>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.Camera"
+                                           OnClick="CaptureTenantAadhar">
+                                    Capture Image
+                                </MudButton>
+                            </MudItem>
+
+                            @*Tenant Pan Image*@
+                            <MudText Typo="Typo.h6">
+                                Add Pan Image
+                            </MudText>
+                            <MudItem xs="12">
+                                <MudImage Src="@tenantPanImage" Fluid=true Class="rounded-lg" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.Image"
+                                           OnClick="UploadTenantPan">
+                                    Upload Image
+                                </MudButton>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.Camera"
+                                           OnClick="CaptureTenantPan">
+                                    Capture Image
+                                </MudButton>
+                            </MudItem>
+                            @if (!string.IsNullOrEmpty(TenantGuid))
+                            {
+                                <MudItem>
+                                    <MudSwitch @bind-Checked="tenant.PresentTenant" Color="Color.Primary">
+                                        @if (tenant.PresentTenant)
+                                        {
+                                            <MudText>Present Tenant</MudText>
+                                        }
+                                        else
+                                        {
+                                            <MudText>Ex-Tenant</MudText>
+                                        }
+                                    </MudSwitch>
+                                </MudItem>
+                            }
+                        </MudGrid>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="AddTenant" Variant="Variant.Filled">
+            @if (string.IsNullOrEmpty(TenantGuid))
+            {
+                <MudText> Add Tenant</MudText>
+            }
+            else
+            {
+                <MudText> Update Tenant</MudText>
+            }
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+
+    [Parameter]
+    public string TenantsFolderPath { get; set; }
+
+    [Parameter]
+    public string TenantsImageFolder { get; set; }
+    [Parameter]
+    public string TenantGuid { get; set; }
+
+    bool isLoading = false;
+    Tenant tenant = new();
+    string tenantImage = string.Empty;
+    Stream tenantImageStream;
+    string tenantAadharImage = string.Empty;
+    Stream tenantAadharStream;
+    string tenantPanImage = string.Empty;
+    Stream tenantPanStream;
+
+    protected override void OnInitialized()
+    {
+        App.Current.On<Microsoft.Maui.Controls.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
+
+        base.OnInitialized();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !string.IsNullOrEmpty(TenantGuid))
+        {
+            isLoading = true;
+            await InvokeAsync(StateHasChanged);
+            await Task.Delay(100);
+            try
+            {
+                var txt = File.ReadAllText(Path.Combine(TenantsFolderPath, TenantGuid + ".txt"));
+                tenant = JsonSerializer.Deserialize<Tenant>(txt);
+                var tenatImagePath = Path.Combine(TenantsImageFolder, TenantGuid + ConstantValues.FileNames.TenantJpg);
+                var aadharImagePath = Path.Combine(TenantsImageFolder, TenantGuid + ConstantValues.FileNames.AadharJpg);
+                var PanImagePath = Path.Combine(TenantsImageFolder, TenantGuid + ConstantValues.FileNames.PanJpg);
+                try
+                {
+                    var bytesData = File.ReadAllBytes(tenatImagePath);
+                    tenantImageStream = new MemoryStream(bytesData);
+                    tenantImage = await GetImageFromFile(tenatImagePath);
+                }
+                catch { }
+                try
+                {
+                    var bytesData = File.ReadAllBytes(aadharImagePath);
+                    tenantAadharStream = new MemoryStream(bytesData);
+                    tenantAadharImage = await GetImageFromFile(aadharImagePath);
+                }
+                catch { }
+                try
+                {
+                    var bytesData = File.ReadAllBytes(PanImagePath);
+                    tenantPanStream = new MemoryStream(bytesData);
+                    tenantPanImage = await GetImageFromFile(PanImagePath);
+                }
+                catch { }
+                isLoading = false;
+                await InvokeAsync(StateHasChanged);
+            }
+            catch
+            {
+                _snack.Add("Something Went Wrong", Severity.Error);
+            }
+        }
+    }
+
+    async void UploadTenantImage()
+    {
+        isLoading = true;
+        await InvokeAsync(StateHasChanged);
+        await Task.Delay(100);
+        try
+        {
+            var result = await MediaPicker.PickPhotoAsync();
+            tenantImageStream = await result.OpenReadAsync();
+            tenantImage = await PopulateImageFromStream(await result.OpenReadAsync());
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            _snack.Add("Something went wrong", Severity.Error);
+        }
+        isLoading = false;
+        StateHasChanged();
+    }
+    async void CaptureTenantImage()
+    {
+        isLoading = true;
+        await InvokeAsync(StateHasChanged);
+        await Task.Delay(100);
+        try
+        {
+            var result = await MediaPicker.CapturePhotoAsync();
+            tenantImageStream = await result.OpenReadAsync();
+            tenantImage = await PopulateImageFromStream(await result.OpenReadAsync());
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            _snack.Add("Something went wrong", Severity.Error);
+        }
+        isLoading = false;
+        StateHasChanged();
+    }
+
+
+    async void UploadTenantAadhar()
+    {
+        isLoading = true;
+        await InvokeAsync(StateHasChanged);
+        await Task.Delay(100);
+        try
+        {
+            var result = await MediaPicker.PickPhotoAsync();
+            tenantAadharStream = await result.OpenReadAsync();
+            tenantAadharImage = await PopulateImageFromStream(await result.OpenReadAsync());
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            _snack.Add("Something went wrong", Severity.Error);
+        }
+        isLoading = false;
+        StateHasChanged();
+    }
+    async void CaptureTenantAadhar()
+    {
+        isLoading = true;
+        await InvokeAsync(StateHasChanged);
+        await Task.Delay(100);
+        try
+        {
+            var result = await MediaPicker.CapturePhotoAsync();
+            tenantAadharStream = await result.OpenReadAsync();
+            tenantAadharImage = await PopulateImageFromStream(await result.OpenReadAsync());
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            _snack.Add("Something went wrong", Severity.Error);
+        }
+        isLoading = false;
+        StateHasChanged();
+    }
+
+
+    async void UploadTenantPan()
+    {
+        isLoading = true;
+        await InvokeAsync(StateHasChanged);
+        await Task.Delay(100);
+        try
+        {
+            var result = await MediaPicker.PickPhotoAsync();
+            tenantPanStream = await result.OpenReadAsync();
+            tenantPanImage = await PopulateImageFromStream(await result.OpenReadAsync());
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            _snack.Add("Something went wrong", Severity.Error);
+        }
+        isLoading = false;
+        StateHasChanged();
+    }
+    async void CaptureTenantPan()
+    {
+        isLoading = true;
+        await InvokeAsync(StateHasChanged);
+        await Task.Delay(100);
+        try
+        {
+            var result = await MediaPicker.CapturePhotoAsync();
+            tenantPanStream = await result.OpenReadAsync();
+            tenantPanImage = await PopulateImageFromStream(await result.OpenReadAsync());
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            _snack.Add("Something went wrong", Severity.Error);
+        }
+        isLoading = false;
+        StateHasChanged();
+    }
+
+    async void AddTenant()
+    {
+        isLoading = true;
+        await InvokeAsync(StateHasChanged);
+        await Task.Delay(100);
+        if (string.IsNullOrEmpty(tenant.Name))
+        {
+            _snack.Add("Enter Tenant Name", Severity.Error);
+        }
+        else
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(tenant.GUID))
+                {
+                    tenant.GUID = Guid.NewGuid().ToString().Replace('-', '_');
+                    tenant.PresentTenant = true;
+                }
+                var txt = JsonSerializer.Serialize(tenant);
+                File.WriteAllText(Path.Combine(TenantsFolderPath, tenant.GUID + ".txt"), txt);
+                try
+                {
+                    if (tenantImageStream != null)
+                        SaveImageFile(tenantImageStream, Path.Combine(TenantsImageFolder, tenant.GUID + ConstantValues.FileNames.TenantJpg));
+                }
+                catch { }
+                try
+                {
+                    if (tenantAadharStream != null)
+                        SaveImageFile(tenantAadharStream, Path.Combine(TenantsImageFolder, tenant.GUID + ConstantValues.FileNames.AadharJpg));
+                }
+                catch { }
+                try
+                {
+                    if (tenantPanStream != null)
+                        SaveImageFile(tenantPanStream, Path.Combine(TenantsImageFolder, tenant.GUID + ConstantValues.FileNames.PanJpg));
+                }
+                catch { }
+                @if (string.IsNullOrEmpty(TenantGuid))
+                {
+                    _snack.Add("Tenant added successfully", Severity.Success);
+                }
+                else
+                {
+                    _snack.Add("Tenant Updated successfully", Severity.Success);
+                }
+                MudDialog.Close(DialogResult.Ok(true));
+            }
+            catch
+            {
+                _snack.Add("Something Went Wrong", Severity.Error);
+            }
+        }
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}
