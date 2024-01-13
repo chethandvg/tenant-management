@@ -1,0 +1,216 @@
+@inject ISnackbar _snack;
+
+<MudDialog DisableSidePadding="true">
+    <DialogContent>
+        <MudContainer Style="max-height:600px; overflow-y: scroll">
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudPaper>
+                        <MudTable Breakpoint="Breakpoint.None" @ref="table" Hover=true Striped=true ServerData="@(new Func<TableState, Task<TableData<PaymentDetails>>>(PaymentsTable))">
+                            <ToolBarContent>
+                                <MudText Typo="Typo.h6">Rooms</MudText>
+                                <MudSpacer />
+                            </ToolBarContent>
+                            <HeaderContent>
+                                <MudTh>Date </MudTh>
+                                <MudTh>Amount</MudTh>
+                                <MudTh>Description</MudTh>
+                                <MudTh>Actions</MudTh>
+                            </HeaderContent>
+                            <RowTemplate>
+                                <MudTd DataLabel="Date">
+                                    @context.PaymentDate.Value.ToString("dd/MMMM/yyyy")
+                                </MudTd>
+                                <MudTd DataLabel="Amount">
+                                    @((context.Amount ?? 0).ToString("0.##"))
+                                </MudTd>
+                                <MudTd DataLabel="Description">
+                                    @context.Description
+                                </MudTd>
+                                <MudTd DataLabel="Actions">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Error" Size="Size.Large" OnClick="()=>RemovePayment(context)" />
+                                </MudTd>
+                            </RowTemplate>
+                            <NoRecordsContent>
+                                <MudText>No Payments found</MudText>
+                            </NoRecordsContent>
+                            <LoadingContent>
+                                <MudText>Loading...</MudText>
+                            </LoadingContent>
+                        </MudTable>
+                    </MudPaper>
+                </MudItem>
+                <MudItem>
+                    <MudPaper>
+                        @if (NewPayment)
+                        {
+                            <h3 style="text-align:center">New Payment</h3>
+                        }
+                        else
+                        {
+                            <h3 style="text-align:center">Edit Payment</h3>
+                        }
+                        <MudGrid>
+                            <MudItem xs="12">
+                                <MudField Label="Total Rent amount" Variant="Variant.Outlined">
+                                    @TotalAmount.ToString("0.##")
+                                </MudField>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudField Label="Balance amount" Variant="Variant.Outlined">
+                                    @((rentPaymentDetails.Balance ?? 0).ToString("0.##"))
+                                </MudField>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudTextField @bind-Value="description" Label="Description" Variant="Variant.Outlined" Immediate=true />
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudDatePicker PickerVariant="PickerVariant.Dialog" Label="Payment Date" @bind-Date="PaidDate" DateFormat="dd/MM/yyyy" />
+                            </MudItem>
+                            <MudItem>
+                                <MudSwitch @bind-Checked="fullPayment" Color="Color.Primary">
+                                    @if (fullPayment)
+                                    {
+                                        UpdateBalanceAmount();
+                                        <MudText>Full Payment</MudText>
+                                    }
+                                    else
+                                    {
+                                        <MudText>Partial Payment</MudText>
+                                    }
+                                </MudSwitch>
+                            </MudItem>
+                            @if (!fullPayment)
+                            {
+                                <MudItem xs="12">
+                                    <MudTextField @bind-Value="PaidAmount" Label="Payment Amount" Variant="Variant.Outlined" Immediate=true TextChanged="ChangeBalance" />
+                                </MudItem>
+                            }
+                            <MudItem>
+                                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Payment" Color="Color.Primary">
+                                    Update Payment
+                                </MudButton>
+                            </MudItem>
+                        </MudGrid>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="UpdatePaymentMethod" Variant="Variant.Filled">Update</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+
+    [Parameter]
+    public string MonthPathValue { get; set; }
+
+    [Parameter]
+    public double TotalAmount { get; set; }
+
+
+    double? PaidAmount { get; set; } = 0;
+    double? MainBalance { get; set; } = 0;
+    DateTime? PaidDate = DateTime.Now;
+    MudTable<PaymentDetails> table;
+    string description = string.Empty;
+    string paymentPath = string.Empty;
+    RentPaymentDetails rentPaymentDetails = new();
+    List<PaymentDetails> paymentDetails = new();
+    bool fullPayment = true;
+    bool NewPayment = true;
+    bool updated = false;
+
+
+    private async Task<TableData<PaymentDetails>> PaymentsTable(TableState state)
+    {
+        paymentDetails = new();
+        var files = GetFiles(MonthPathValue);
+        paymentPath = Path.Combine(MonthPathValue, ConstantValues.FileNames.PaymentDetailsTxt);
+        if (files.Contains(paymentPath))
+        {
+
+            try
+            {
+                rentPaymentDetails = GetRentPaymentDetails(paymentPath);
+                paymentDetails = rentPaymentDetails.AllPayments;
+            }
+            catch
+            {
+
+            }
+
+        }
+        UpdateBalanceAmount();
+        StateHasChanged();
+        return new()
+            {
+                Items = paymentDetails,
+                TotalItems = paymentDetails.Count
+            };
+    }
+
+    async void UpdateTxtPaymentFileDetails()
+    {
+        var txtjson = JsonSerializer.Serialize(rentPaymentDetails);
+        File.WriteAllText(paymentPath, txtjson);
+        await table.ReloadServerData();
+    }
+    void RemovePayment(PaymentDetails payment)
+    {
+        rentPaymentDetails.AllPayments.Remove(payment);
+        rentPaymentDetails.Balance += payment.Amount;
+        UpdateTxtPaymentFileDetails();
+    }
+    void ChangeBalance()
+    {
+        rentPaymentDetails.Balance = (MainBalance ?? 0) - (PaidAmount ?? 0);
+        StateHasChanged();
+    }
+
+    void UpdateBalanceAmount()
+    {
+        if (!paymentDetails.Any())
+        {
+            rentPaymentDetails.Balance = TotalAmount;
+            MainBalance = rentPaymentDetails.Balance;
+        }
+        else
+        {
+            var files = GetFiles(MonthPathValue);
+            if (files.Contains(paymentPath))
+                rentPaymentDetails.Balance = GetBalance(paymentPath) ?? TotalAmount;
+            else
+                rentPaymentDetails.Balance = TotalAmount;
+        }
+    }
+
+    void UpdatePaymentMethod()
+    {
+        try
+        {
+            if (fullPayment)
+                PaidAmount = rentPaymentDetails.Balance;
+            rentPaymentDetails.AllPayments.Add(new()
+                {
+                    Amount = PaidAmount ?? 0,
+                    Description = description,
+                    PaymentDate = PaidDate
+                });
+            ChangeBalance();
+            UpdateTxtPaymentFileDetails();
+            PaidAmount = 0;
+            _snack.Add("Updated SuccessFully", Severity.Success);
+        }
+        catch
+        {
+            _snack.Add("Something Went Wrong", Severity.Error);
+        }
+    }
+    void Cancel() => MudDialog.Cancel();
+}
