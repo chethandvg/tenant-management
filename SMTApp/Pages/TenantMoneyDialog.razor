@@ -1,0 +1,127 @@
+@using System.Text.Json;
+@inject ISnackbar _snack;
+
+
+<MudDialog DisableSidePadding="true">
+    <DialogContent>
+        <MudContainer Style="max-height:600px; overflow-y: scroll">
+            <MudGrid>
+                @if (isLoading)
+                {
+                    <MudOverlay Visible="isLoading" DarkBackground="true" Absolute="true">
+                        <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+                    </MudOverlay>
+                }
+                else
+                {
+                    @*Borrowed Money*@
+                    <MudItem xs="12">
+                        <MudPaper>
+                            <MudTable Breakpoint="Breakpoint.None" @ref="table" Hover=true Striped=true ServerData="@(new Func<TableState, Task<TableData<PaymentDetails>>>(PaymentsTable))">
+                                <ToolBarContent>
+                                    <MudText Typo="Typo.h6">Rooms</MudText>
+                                    <MudSpacer />
+                                </ToolBarContent>
+                                <HeaderContent>
+                                    <MudTh>Date </MudTh>
+                                    <MudTh>Amount</MudTh>
+                                    <MudTh>Description</MudTh>
+                                    <MudTh>Actions</MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd DataLabel="Date">
+                                        @context.PaymentDate.Value.ToString("dd/MMMM/yyyy")
+                                    </MudTd>
+                                    <MudTd DataLabel="Amount">
+                                        @((context.Amount ?? 0).ToString("0.##"))
+                                    </MudTd>
+                                    <MudTd DataLabel="Description">
+                                        @context.Description
+                                    </MudTd>
+                                    <MudTd DataLabel="Actions">
+                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Error" Size="Size.Large" />
+                                    </MudTd>
+                                </RowTemplate>
+                                <NoRecordsContent>
+                                    <MudText>No Payments found</MudText>
+                                </NoRecordsContent>
+                                <LoadingContent>
+                                    <MudText>Loading...</MudText>
+                                </LoadingContent>
+                            </MudTable>
+                        </MudPaper>
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudContainer>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public string TenantFilePath { get; set; }
+
+    Tenant TenantDetails = new Tenant();
+    bool isLoading = true;
+    MudTable<PaymentDetails> table;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Task.Delay(100);
+            try
+            {
+                var tenanttxt = File.ReadAllText(TenantFilePath);
+                TenantDetails = JsonSerializer.Deserialize<Tenant>(tenanttxt);
+                isLoading = false;
+                StateHasChanged();
+                await Task.Delay(100);
+            }
+            catch
+            {
+                _snack.Add("Something Went Wrong", Severity.Error);
+            }
+        }
+    }
+
+    private async Task<TableData<PaymentDetails>> PaymentsTable(TableState state)
+    {
+        List<PaymentDetails> payments = new();
+        try
+        {
+            payments = TenantDetails.Payments;
+        }
+        catch
+        {
+        }
+        return new()
+            {
+                Items = payments,
+                TotalItems = payments.Count
+            };
+    }
+    private async Task<TableData<PaymentDetails>> BorrowTable(TableState state)
+    {
+        List<PaymentDetails> borrowedMoney = new();
+        try
+        {
+            borrowedMoney = TenantDetails.BorrowedMoney;
+        }
+        catch
+        {
+        }
+        return new()
+            {
+                Items = borrowedMoney,
+                TotalItems = borrowedMoney.Count
+            };
+    }
+
+    class TenantMoneyTable : PaymentDetails
+    {
+        public bool Payment { get; set; }
+    }
+}

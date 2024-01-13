@@ -14,10 +14,10 @@
                                 <MudTextField @bind-Value="tenant.Name" Variant="Variant.Outlined" Immediate=true Label="Name" />
                             </MudItem>
                             <MudItem xs="12">
-                                <MudTextField @bind-Value="tenant.AadharNumber" Variant="Variant.Outlined" Immediate=true Label="Aadhar Number" />
+                                <MudTextField @bind-Value="tenant.DocNumber" Variant="Variant.Outlined" Immediate=true Label="Document Number" HelperText="Passport is prefered" />
                             </MudItem>
                             <MudItem xs="12">
-                                <MudTextField @bind-Value="tenant.PanNumber" Variant="Variant.Outlined" Immediate=true Label="Pan Number" />
+                                <MudTextField @bind-Value="tenant.OtherDocNumber" Variant="Variant.Outlined" Immediate=true Label="Other Number" />
                             </MudItem>
                             <MudItem xs="12">
                                 <MudTextField @bind-Value="tenant.NumberOfResidents" Variant="Variant.Outlined" Immediate=true Label="Number Of Residents" />
@@ -57,7 +57,7 @@
                                 Add Aadhar Image
                             </MudText>
                             <MudItem xs="12">
-                                <MudImage Src="@tenantAadharImage" Fluid=true Class="rounded-lg" />
+                                <MudImage Src="@tenantDocImage" Fluid=true Class="rounded-lg" />
                             </MudItem>
                             <MudItem xs="6">
                                 <MudButton HtmlTag="label"
@@ -83,7 +83,7 @@
                                 Add Pan Image
                             </MudText>
                             <MudItem xs="12">
-                                <MudImage Src="@tenantPanImage" Fluid=true Class="rounded-lg" />
+                                <MudImage Src="@tenantOtherImage" Fluid=true Class="rounded-lg" />
                             </MudItem>
                             <MudItem xs="6">
                                 <MudButton HtmlTag="label"
@@ -155,10 +155,10 @@
     Tenant tenant = new();
     string tenantImage = string.Empty;
     Stream tenantImageStream;
-    string tenantAadharImage = string.Empty;
-    Stream tenantAadharStream;
-    string tenantPanImage = string.Empty;
-    Stream tenantPanStream;
+    string tenantDocImage = string.Empty;
+    Stream tenantDocStream;
+    string tenantOtherImage = string.Empty;
+    Stream tenantOtherStream;
 
     protected override void OnInitialized()
     {
@@ -179,8 +179,8 @@
                 var txt = File.ReadAllText(Path.Combine(TenantsFolderPath, TenantGuid + ".txt"));
                 tenant = JsonSerializer.Deserialize<Tenant>(txt);
                 var tenatImagePath = Path.Combine(TenantsImageFolder, TenantGuid + ConstantValues.FileNames.TenantJpg);
-                var aadharImagePath = Path.Combine(TenantsImageFolder, TenantGuid + ConstantValues.FileNames.AadharJpg);
-                var PanImagePath = Path.Combine(TenantsImageFolder, TenantGuid + ConstantValues.FileNames.PanJpg);
+                var aadharImagePath = Path.Combine(TenantsImageFolder, TenantGuid + ConstantValues.FileNames.DocJpg);
+                var PanImagePath = Path.Combine(TenantsImageFolder, TenantGuid + ConstantValues.FileNames.OtherJpg);
                 try
                 {
                     var bytesData = File.ReadAllBytes(tenatImagePath);
@@ -191,15 +191,15 @@
                 try
                 {
                     var bytesData = File.ReadAllBytes(aadharImagePath);
-                    tenantAadharStream = new MemoryStream(bytesData);
-                    tenantAadharImage = await GetImageFromFile(aadharImagePath);
+                    tenantDocStream = new MemoryStream(bytesData);
+                    tenantDocImage = await GetImageFromFile(aadharImagePath);
                 }
                 catch { }
                 try
                 {
                     var bytesData = File.ReadAllBytes(PanImagePath);
-                    tenantPanStream = new MemoryStream(bytesData);
-                    tenantPanImage = await GetImageFromFile(PanImagePath);
+                    tenantOtherStream = new MemoryStream(bytesData);
+                    tenantOtherImage = await GetImageFromFile(PanImagePath);
                 }
                 catch { }
                 isLoading = false;
@@ -260,8 +260,8 @@
         try
         {
             var result = await MediaPicker.PickPhotoAsync();
-            tenantAadharStream = await result.OpenReadAsync();
-            tenantAadharImage = await PopulateImageFromStream(await result.OpenReadAsync());
+            tenantDocStream = await result.OpenReadAsync();
+            tenantDocImage = await PopulateImageFromStream(await result.OpenReadAsync());
             StateHasChanged();
         }
         catch (Exception ex)
@@ -279,8 +279,8 @@
         try
         {
             var result = await MediaPicker.CapturePhotoAsync();
-            tenantAadharStream = await result.OpenReadAsync();
-            tenantAadharImage = await PopulateImageFromStream(await result.OpenReadAsync());
+            tenantDocStream = await result.OpenReadAsync();
+            tenantDocImage = await PopulateImageFromStream(await result.OpenReadAsync());
             StateHasChanged();
         }
         catch (Exception ex)
@@ -300,8 +300,8 @@
         try
         {
             var result = await MediaPicker.PickPhotoAsync();
-            tenantPanStream = await result.OpenReadAsync();
-            tenantPanImage = await PopulateImageFromStream(await result.OpenReadAsync());
+            tenantOtherStream = await result.OpenReadAsync();
+            tenantOtherImage = await PopulateImageFromStream(await result.OpenReadAsync());
             StateHasChanged();
         }
         catch (Exception ex)
@@ -319,8 +319,8 @@
         try
         {
             var result = await MediaPicker.CapturePhotoAsync();
-            tenantPanStream = await result.OpenReadAsync();
-            tenantPanImage = await PopulateImageFromStream(await result.OpenReadAsync());
+            tenantOtherStream = await result.OpenReadAsync();
+            tenantOtherImage = await PopulateImageFromStream(await result.OpenReadAsync());
             StateHasChanged();
         }
         catch (Exception ex)
@@ -359,14 +359,14 @@
                 catch { }
                 try
                 {
-                    if (tenantAadharStream != null)
-                        SaveImageFile(tenantAadharStream, Path.Combine(TenantsImageFolder, tenant.GUID + ConstantValues.FileNames.AadharJpg));
+                    if (tenantDocStream != null)
+                        SaveImageFile(tenantDocStream, Path.Combine(TenantsImageFolder, tenant.GUID + ConstantValues.FileNames.DocJpg));
                 }
                 catch { }
                 try
                 {
-                    if (tenantPanStream != null)
-                        SaveImageFile(tenantPanStream, Path.Combine(TenantsImageFolder, tenant.GUID + ConstantValues.FileNames.PanJpg));
+                    if (tenantOtherStream != null)
+                        SaveImageFile(tenantOtherStream, Path.Combine(TenantsImageFolder, tenant.GUID + ConstantValues.FileNames.OtherJpg));
                 }
                 catch { }
                 @if (string.IsNullOrEmpty(TenantGuid))
