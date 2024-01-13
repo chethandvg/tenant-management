@@ -1,0 +1,420 @@
+@page "/{building}/{room}/{month}/{year}/rent"
+@inject ISnackbar _snack
+@inject IDialogService DialogSrc
+
+<h3>@Building -> @Room -> @Month / @Year Room Details</h3>
+
+
+<MudGrid>
+    <MudItem xs="12">
+        <MudPaper Class="pa-4" Style="position: relative;">
+            <MudOverlay Visible="isLoading" DarkBackground="true" Absolute="true">
+                <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+            </MudOverlay>
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="roomDetails.RentAmount" Label="Rent Amount" Variant="Variant.Outlined" Immediate=true TextChanged="UpdateTotalAmount" />
+                </MudItem>
+
+                @*Electric Bill Details*@
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="roomDetails.ElectricityBill.Amount" Label="Electricity Bill Amount" Variant="Variant.Outlined" Immediate=true TextChanged="UpdateTotalAmount" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudImage Src="@EBillImage" Fluid=true Class="rounded-lg" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudButton HtmlTag="label"
+                               Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Material.Filled.CloudUpload"
+                               OnClick="EUploadImage">
+                        Upload Image
+                    </MudButton>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudButton HtmlTag="label"
+                               Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Material.Filled.Image"
+                               OnClick="ECaptureImage">
+                        Capture Image
+                    </MudButton>
+                </MudItem>
+
+                @*Water Bill Details*@
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="roomDetails.WaterBill.Amount" Label="Water Bill Amount" Variant="Variant.Outlined" Immediate=true TextChanged="UpdateTotalAmount" />
+                </MudItem><MudItem xs="12">
+                    <MudImage Src="@WBillImage" Fluid=true Class="rounded-lg" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudButton HtmlTag="label"
+                               Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Material.Filled.CloudUpload"
+                               OnClick="WUploadImage">
+                        Upload Image
+                    </MudButton>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudButton HtmlTag="label"
+                               Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Material.Filled.Image"
+                               OnClick="WCaptureImage">
+                        Capture Image
+                    </MudButton>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudField Label="Total Amount" Variant="Variant.Outlined">
+                        @((totalAmount).ToString("0.##"))
+                    </MudField>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudField Label="Balance Amount" Variant="Variant.Outlined">
+                        @((roomDetails.Balance ?? 0).ToString("0.##"))
+                    </MudField>
+                </MudItem>
+                <MudItem xs="12" Style="text-align:center">
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.CloudUpload" Color="Color.Primary" OnClick="UpdateRentDetails">Update Rent Details</MudButton>
+                </MudItem>
+                <MudItem xs="6" Style="text-align:center">
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Share" Color="Color.Primary" OnClick="ShareRentDetails">Share Rent Details</MudButton>
+                </MudItem>
+                @if (EBillImage.Length > 50 && WBillImage.Length > 50)
+                {
+                    <MudItem xs="6" Style="text-align:center">
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FolderShared" Color="Color.Primary" OnClick="ShareAllBills">Share all Bills</MudButton>
+                    </MudItem>
+                }
+                @if (EBillImage.Length > 50)
+                {
+                    <MudItem xs="6" Style="text-align:center">
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.ScreenShare" Color="Color.Primary" OnClick="ShareEBill">Share Electricity Bill</MudButton>
+                    </MudItem>
+                }
+                @if (WBillImage.Length > 50)
+                {
+                    <MudItem xs="6" Style="text-align:center">
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.ScreenShare" Color="Color.Primary" OnClick="ShareWBill">Share Water Bill</MudButton>
+                    </MudItem>
+                }
+                @if (displayPaymentBtn)
+                {
+                    <MudItem xs="12" Style="text-align:center">
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Money" Color="Color.Primary" OnClick="UpdateMonthlyRentPayment">Payment Details</MudButton>
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+@code {
+    [Parameter]
+    public string Building { get; set; }
+    [Parameter]
+    public string Room { get; set; }
+    [Parameter]
+    public string Month { get; set; }
+    [Parameter]
+    public string Year { get; set; }
+
+    bool isLoading = true;
+    bool displayPaymentBtn = false;
+    string roomPath = string.Empty;
+    string detailfilesPath = string.Empty;
+    string detailTxtfilePath = string.Empty;
+    string rentDetailfilePath = string.Empty;
+    string paymentDetailsPath = string.Empty;
+    string yearPath = string.Empty;
+    string monthPath = string.Empty;
+    string filePath = string.Empty;
+    Room roomDetails = new();
+    Stream EBillStream;
+    string EBillImage = string.Empty;
+    string EBillImagePath = string.Empty;
+    Stream WBillStream;
+    string WBillImage = string.Empty;
+    string WBillImagePath = string.Empty;
+    double totalAmount = 0;
+
+    protected override void OnInitialized()
+    {
+        App.Current.On<Microsoft.Maui.Controls.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
+
+        base.OnInitialized();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Task.Delay(1000);
+            try
+            {
+                if (string.IsNullOrEmpty(mainPath))
+                    mainPath = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, ConstantValues.HouseData);
+                var buildingpath = System.IO.Path.Combine(mainPath, Building);
+                roomPath = System.IO.Path.Combine(buildingpath, Room);
+                detailfilesPath = System.IO.Path.Combine(roomPath, ConstantValues.DetailFiles);
+                detailTxtfilePath = System.IO.Path.Combine(detailfilesPath, ConstantValues.FileNames.DetailsTxtFile);
+                rentDetailfilePath = System.IO.Path.Combine(detailfilesPath, ConstantValues.RentDetails);
+                try
+                {
+                    var dataVal = File.ReadAllText(detailTxtfilePath);
+                    if (!string.IsNullOrEmpty(dataVal))
+                        roomDetails = GenerateRoomModelFromCSV(dataVal);
+                }
+                catch
+                {
+
+                }
+
+                if (!GetDirectories(detailfilesPath).Contains(rentDetailfilePath))
+                    Directory.CreateDirectory(rentDetailfilePath);
+
+                yearPath = System.IO.Path.Combine(rentDetailfilePath, Year);
+                if (!GetDirectories(rentDetailfilePath).Contains(yearPath))
+                    Directory.CreateDirectory(yearPath);
+
+                monthPath = System.IO.Path.Combine(yearPath, Month);
+                //Directory.Delete(monthPath, true);
+                if (!GetDirectories(yearPath).Contains(monthPath))
+                    Directory.CreateDirectory(monthPath);
+
+                var files = GetFiles(monthPath);
+                filePath = System.IO.Path.Combine(monthPath, ConstantValues.FileNames.RentTxtFile);
+                paymentDetailsPath = Path.Combine(monthPath, ConstantValues.FileNames.PaymentDetailsTxt);
+                if (files.Contains(filePath))
+                    displayPaymentBtn = true;
+
+                var data = File.ReadAllText(filePath);
+                roomDetails = GenerateRoomModelFromRentCSV(data);
+                UpdateTotalAmount();
+                UpdateBalanceAmount();
+                EBillImagePath = Path.Combine(monthPath, ConstantValues.FileNames.EbillJpg);
+                WBillImagePath = Path.Combine(monthPath, ConstantValues.FileNames.WbillJpg);
+                try
+                {
+                    var bytesData = File.ReadAllBytes(EBillImagePath);
+                    EBillStream = new MemoryStream(bytesData);
+                    EBillImage = await GetImageFromFile(EBillImagePath);
+                }
+                catch { }
+                try
+                {
+                    var bytesData = File.ReadAllBytes(WBillImagePath);
+                    WBillStream = new MemoryStream(bytesData);
+                    WBillImage = await GetImageFromFile(WBillImagePath);
+                }
+                catch { }
+
+            }
+            catch
+            {
+
+            }
+            isLoading = false;
+            StateHasChanged();
+        }
+        //return base.OnAfterRenderAsync(firstRender);
+    }
+    async void EUploadImage()
+    {
+        isLoading = true;
+        StateHasChanged();
+        try
+        {
+            var result = await MediaPicker.PickPhotoAsync();
+            EBillStream = await result.OpenReadAsync();
+            EBillImage = await PopulateImageFromStream(await result.OpenReadAsync());
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            _snack.Add("Something went wrong", Severity.Error);
+        }
+        isLoading = false;
+        StateHasChanged();
+    }
+    async void ECaptureImage()
+    {
+        isLoading = true;
+        StateHasChanged();
+        try
+        {
+            var result = await MediaPicker.CapturePhotoAsync();
+            EBillStream = await result.OpenReadAsync();
+            EBillImage = await PopulateImageFromStream(await result.OpenReadAsync());
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            _snack.Add("Something went wrong", Severity.Error);
+        }
+        isLoading = false;
+        StateHasChanged();
+    }
+    async void WUploadImage()
+    {
+        isLoading = true;
+        StateHasChanged();
+        try
+        {
+            var result = await MediaPicker.PickPhotoAsync();
+            WBillStream = await result.OpenReadAsync();
+            WBillImage = await PopulateImageFromStream(await result.OpenReadAsync());
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            _snack.Add("Something went wrong", Severity.Error);
+        }
+        isLoading = false;
+        StateHasChanged();
+    }
+    async void WCaptureImage()
+    {
+        isLoading = true;
+        StateHasChanged();
+        try
+        {
+            var result = await MediaPicker.CapturePhotoAsync();
+            WBillStream = await result.OpenReadAsync();
+            WBillImage = await PopulateImageFromStream(await result.OpenReadAsync());
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            _snack.Add("Something went wrong", Severity.Error);
+        }
+        isLoading = false;
+        StateHasChanged();
+    }
+    async void ShareRentDetails()
+    {
+        try
+        {
+            await Share.Default.RequestAsync(new ShareTextRequest
+                {
+                    Text = $"Mounthly Rent -> {roomDetails.RentAmount} \n Water bill -> {roomDetails.WaterBill.Amount} \n Electicity Bill -> {roomDetails.ElectricityBill.Amount} \n Total -> {roomDetails.RentAmount + roomDetails.WaterBill.Amount + roomDetails.ElectricityBill.Amount}",
+                    Title = "Rent Details"
+                });
+        }
+        catch
+        {
+            _snack.Add("Something went wrong", Severity.Error);
+        }
+    }
+    void ShareEBill()
+    {
+        try
+        {
+            ShareFilesList(new()
+            {
+                new ShareFile(Path.Combine(monthPath, ConstantValues.FileNames.EbillJpg))
+            }, "Share Electricity Bill");
+        }
+        catch
+        {
+            _snack.Add("Something went wrong", Severity.Error);
+        }
+    }
+    void ShareWBill()
+    {
+        try
+        {
+            ShareFilesList(new()
+            {
+                new ShareFile(Path.Combine(monthPath, ConstantValues.FileNames.WbillJpg))
+            }, "Share Water Bills");
+        }
+        catch
+        {
+            _snack.Add("Something went wrong", Severity.Error);
+        }
+    }
+    void ShareAllBills()
+    {
+        try
+        {
+            ShareFilesList(new()
+            {
+                new ShareFile(Path.Combine(monthPath, ConstantValues.FileNames.EbillJpg)),
+                new ShareFile(Path.Combine(monthPath, ConstantValues.FileNames.WbillJpg))
+            }, "All Bills");
+        }
+        catch
+        {
+            _snack.Add("Something went wrong", Severity.Error);
+        }
+    }
+    void UpdateRentDetails()
+    {
+        try
+        {
+            var txt = GenerateRentCSVFromRoomModel(roomDetails);
+            File.WriteAllText(filePath, txt);
+            try
+            {
+                SaveImageFile(EBillStream, Path.Combine(monthPath, ConstantValues.FileNames.EbillJpg));
+
+            }
+            catch { }
+            try
+            {
+                SaveImageFile(WBillStream, Path.Combine(monthPath, ConstantValues.FileNames.WbillJpg));
+            }
+            catch { }
+            displayPaymentBtn = true;
+            RentPaymentDetails paymentDetails = new() { AllPayments = new(), Balance = roomDetails.Balance };
+            var txtjson = JsonSerializer.Serialize(paymentDetails);
+            File.WriteAllText(paymentDetailsPath, txtjson);
+            _snack.Add("Updated Successfully", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            _snack.Add("Something went wrong", Severity.Error);
+        }
+    }
+
+    void UpdateBalanceAmount()
+    {
+        var files = GetFiles(monthPath);
+        if (files.Contains(paymentDetailsPath))
+            roomDetails.Balance = GetBalance(paymentDetailsPath) ?? totalAmount;
+        else
+            roomDetails.Balance = totalAmount;
+    }
+    void UpdateTotalAmount()
+    {
+        totalAmount = (roomDetails.RentAmount ?? 0) +
+            (roomDetails.ElectricityBill.Amount ?? 0) +
+            (roomDetails.WaterBill.Amount ?? 0);
+        roomDetails.Balance += totalAmount - roomDetails.Balance;
+        StateHasChanged();
+    }
+
+    async void UpdateMonthlyRentPayment()
+    {
+        try
+        {
+            totalAmount = (roomDetails.RentAmount ?? 0) +
+            (roomDetails.ElectricityBill.Amount ?? 0) +
+            (roomDetails.WaterBill.Amount ?? 0);
+            var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true, FullScreen = true };
+            var parameters = new DialogParameters();
+            parameters.Add("TotalAmount", totalAmount);
+            parameters.Add("MonthPathValue", monthPath);
+            var dialog = await DialogSrc.ShowAsync<RentPaymentDialog>("Payment Details", parameters, options);
+            var result = await dialog.Result;
+            UpdateBalanceAmount();
+            StateHasChanged();
+        }
+        catch
+        {
+            _snack.Add("Something went wrong", Severity.Error);
+        }
+    }
+}
