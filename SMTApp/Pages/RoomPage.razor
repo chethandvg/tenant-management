@@ -40,7 +40,7 @@
                 <MudField Label="Last paid Date" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.CalendarMonth" Adornment="Adornment.End" AdornmentColor="Color.Primary">
                     @if (roomDetails.LastPaidDate != null)
                     {
-                        @(roomDetails.LastPaidDate.Value.ToString("dd/MMMM/yyyy"))
+                        @(roomDetails.LastPaidDate?.ToString("dd/MMMM/yyyy")??string.Empty)
                     }
                 </MudField>
                 <MudField Label="Tenant" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Person" AdornmentColor="Color.Primary" OnAdornmentClick="ViewTenants">
@@ -58,7 +58,7 @@
                         )
                 </MudField>
                 <MudField Label="Rent start date" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.CalendarMonth" Adornment="Adornment.End" AdornmentColor="Color.Primary">
-                    @roomDetails.RentStartDate.ToString()
+                    @(roomDetails.RentStartDate?.ToString("dd/MMMM/yyyy")??string.Empty)
                 </MudField>
 
                 <MudField Label="Room Type" Variant="Variant.Outlined">
@@ -164,7 +164,7 @@
             File.WriteAllText(detailTxtfilePath, "");
         var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true };
         var parameters = new DialogParameters();
-        parameters.Add("RoomPath", roomPath);
+        parameters.Add("DetailTxtfilePath", detailTxtfilePath);
         var dialog = await DialogSrc.ShowAsync<UpdateRoomDetailsDialog>("Update Room Details", parameters, options);
         var result = await dialog.Result;
         if (!result.Canceled)
