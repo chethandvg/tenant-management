@@ -1,0 +1,42 @@
+<MudDialog DisableSidePadding="true">
+    <DialogContent>
+        <MudContainer Style="max-height: 320px;overflow-y: scroll">
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="roomDetails.AdvanceAmount" Label="Advance Amount" Variant="Variant.Outlined" Immediate=true />
+                </MudItem><MudItem xs="12">
+                    <MudTextField @bind-Value="roomDetails.RentAmount" Label="Rent Amount" Variant="Variant.Outlined" Immediate=true />
+                </MudItem><MudItem xs="12">
+                    <MudTextField @bind-Value="roomDetails.LeaseAmount" Label="Lease Amount" Variant="Variant.Outlined" Immediate=true />
+                </MudItem><MudItem xs="12">
+                    <MudDatePicker Label="Rent Start Date" @bind-Date="roomDetails.RentStartDate" Mask="@(new DateMask("dd/MM/yyyy"))" DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Placeholder="Rest Start Date" />
+                </MudItem><MudItem xs="12">
+                    <MudTextField @bind-Value="roomDetails.ElectricityAccountNumber" Label="Electricity Account Number" Variant="Variant.Outlined" Immediate=true />
+                </MudItem><MudItem xs="12">
+                    <MudTextField @bind-Value="roomDetails.WaterAccountNumber" Label="Water Account Number" Variant="Variant.Outlined" Immediate=true />
+                </MudItem><MudItem xs="12">
+                    <MudTextField @bind-Value="roomDetails.RoomType" Label="Room Type" Variant="Variant.Outlined" Immediate=true />
+                </MudItem>
+            </MudGrid>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit" Variant="Variant.Filled">Update</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public string RoomPath { get; set; }
+
+    Room roomDetails = new();
+    void Submit()
+    {
+        if (roomDetails != null)
+            MudDialog.Close(DialogResult.Ok(roomDetails));
+    }
+    void Cancel() => MudDialog.Cancel();
+}

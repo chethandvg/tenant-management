@@ -1,0 +1,58 @@
+@inject ISnackbar _snack
+
+<MudDialog DisableSidePadding="true">
+    <DialogContent>
+        <MudContainer Style="max-height:600px; overflow-y: scroll">
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudPaper Class="pa-4" Style="position: relative;">
+                        <MudOverlay Visible="isLoading" DarkBackground="true" Absolute="true">
+                            <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+                        </MudOverlay>
+                        <MudImage Fluid="true" Src="@image" Alt="Image" Class="rounded-lg" />
+                    </MudPaper>
+                </MudItem>>
+            </MudGrid>
+        </MudContainer>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public string ImagePath { get; set; }
+
+    bool isLoading = true;
+    Stream imageStream;
+    string image = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        App.Current.On<Microsoft.Maui.Controls.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
+
+        base.OnInitialized();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Task.Delay(1000);
+
+            try
+            {
+                var bytesData = File.ReadAllBytes(ImagePath);
+                imageStream = new MemoryStream(bytesData);
+                image = await GetImageFromFile(ImagePath);
+
+                isLoading = false;
+                await InvokeAsync(StateHasChanged);
+            }
+            catch
+            {
+                _snack.Add("Image not found", Severity.Error);
+            }
+        }
+    }
+}
