@@ -1,0 +1,115 @@
+@using System.Globalization;
+@inject NavigationManager _navMng
+
+<MudDialog DisableSidePadding="true">
+    <DialogContent>
+        <MudContainer Style="max-height:600px; overflow-y: scroll">
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudPaper>
+                        <MudOverlay Visible="isLoading" DarkBackground="true" Absolute="true">
+                            <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+                        </MudOverlay>
+                        <MudTable Breakpoint="Breakpoint.None" @ref="table" Hover=true Striped=true ServerData="@(new Func<TableState, Task<TableData<KeyValuePair<string,double>>>>(MonthlyRentTable))">
+                            <HeaderContent>
+                                <MudTh>Date </MudTh>
+                                <MudTh>Balance</MudTh>
+                                <MudTh>Actions</MudTh>
+                            </HeaderContent>
+                            <RowTemplate>
+                                <MudTd>
+                                    @context.Key
+                                </MudTd>
+                                <MudTd>
+                                    @context.Value
+                                </MudTd>
+                                <MudTd>
+                                    <MudIconButton Icon="@Icons.Material.Filled.ArrowRight" Color="Color.Primary" OnClick="()=>NavigateToMonthlyRentPage(context.Key)" Variant="Variant.Filled" />
+                                </MudTd>
+                            </RowTemplate>
+                            <NoRecordsContent>
+                                <MudText>No Payments found</MudText>
+                            </NoRecordsContent>
+                            <LoadingContent>
+                                <MudText>Loading...</MudText>
+                            </LoadingContent>
+                        </MudTable>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+        </MudContainer>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public string RoomPathValue { get; set; }
+
+    MudTable<KeyValuePair<string, double>> table;
+    string detailfilesPath = string.Empty;
+    string rentDetailfilePath = string.Empty;
+    bool isLoading = true;
+
+    protected override void OnInitialized()
+    {
+        detailfilesPath = System.IO.Path.Combine(RoomPathValue, ConstantValues.DetailFiles);
+        rentDetailfilePath = System.IO.Path.Combine(detailfilesPath, ConstantValues.RentDetails);
+        base.OnInitialized();
+    }
+
+    private async Task<TableData<KeyValuePair<string, double>>> MonthlyRentTable(TableState state)
+    {
+        List<KeyValuePair<string, double>> data = new();
+        try
+        {
+            var folders = GetDirectories(rentDetailfilePath);
+            var allYears = folders.Select(x => int.Parse(Path.GetFileName(x))).ToList();
+            foreach (var year in allYears)
+            {
+                var tmpYearPath = Path.Combine(rentDetailfilePath, year.ToString());
+                var monthLst = GetDirectories(tmpYearPath);
+                var tempFolders = monthLst.Select(x =>
+                            DateTime.ParseExact(Path.GetFileNameWithoutExtension(x), "MMMM", CultureInfo.CurrentCulture).Month
+                            ).ToList();//get names of each month folders and get numeric value of that month
+                var newTempFolders = tempFolders.OrderByDescending(x=>x);// arrange months in descending order
+                foreach (var mnth in newTempFolders)
+                {
+                    var tempMonthPath = monthLst[tempFolders.IndexOf(mnth)];
+                    var paymentDetailsPath = Path.Combine(tempMonthPath, ConstantValues.FileNames.PaymentDetailsTxt);
+                    var balance = GetBalance(paymentDetailsPath);
+                    var val = new KeyValuePair<string, double>(
+                         Path.GetFileName(tempMonthPath) + "/" + Path.GetFileName(tmpYearPath),
+                        balance ?? 0
+                    );
+                    data.Add(val);
+                }
+            }
+        }
+        catch
+        { }
+        isLoading = false;
+        StateHasChanged();
+        return new()
+            {
+                Items = data,
+                TotalItems = data.Count()
+            };
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="date">MMMM/yyyy format</param>
+    async void NavigateToMonthlyRentPage(string date)
+    {
+        isLoading = true;
+        await InvokeAsync(StateHasChanged);
+        await Task.Delay(100);
+        var room = Path.GetFileName(RoomPathValue);
+        var splitVal = RoomPathValue.Split("/" + room);
+        var building = Path.GetFileName(splitVal[0]);
+        _navMng.NavigateTo($"/{building}/{room}/{date}/rent");
+    }
+}

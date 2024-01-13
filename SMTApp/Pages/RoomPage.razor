@@ -1,0 +1,370 @@
+@page "/{building}/{room}/roompage"
+@inject IDialogService DialogSrc
+@inject NavigationManager NavMng
+
+
+<h3>@Building -> @Room Room Details</h3>
+
+<MudGrid>
+    <MudItem xs="12">
+        <MudPaper Class="pa-4" Style="min-height:500px; position: relative;">
+            @if (isLoading)
+            {
+                <MudOverlay Visible="isLoading" DarkBackground="true" Absolute="true">
+                    <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+                </MudOverlay>
+            }
+            else
+            {
+                <MudField Label="Room Name" Variant="Variant.Outlined">
+                    @Room
+                </MudField>
+                <MudField Label="Advance amount" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Euro" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
+                    @roomDetails.AdvanceAmount
+                </MudField>
+                <MudField Label="Monthly Rent" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Euro" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
+                    @roomDetails.RentAmount
+                </MudField>
+                <MudField Label="Lease amount" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Euro" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
+                    @roomDetails.LeaseAmount
+                </MudField>
+                <MudField Label="Borrowed money" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Euro" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
+                    @(roomDetails.BorrowedMoney ?? 0)
+                </MudField>
+                <MudField Label="Balance" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Euro" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
+                    @(roomDetails.Balance ?? 0)
+                </MudField>
+                <MudField Label="Last paid Amount" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Euro" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
+                    @((roomDetails.LastPaidAmount ?? 0).ToString("0.##"))
+                </MudField>
+                <MudField Label="Last paid Date" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.CalendarMonth" Adornment="Adornment.End" AdornmentColor="Color.Primary">
+                    @if (roomDetails.LastPaidDate != null)
+                    {
+                        @(roomDetails.LastPaidDate?.ToString("dd/MMMM/yyyy")??string.Empty)
+                    }
+                </MudField>
+                <MudField Label="Tenant" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Person" AdornmentColor="Color.Primary" OnAdornmentClick="ViewTenants">
+                    @currentTenant?.Name
+                </MudField>
+                <MudField Label="Last Month Electricity bill" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.ElectricalServices" AdornmentColor="Color.Primary" OnAdornmentClick="ViewElectricityBill">
+                    @(
+                        latestYearFolder != 0 ? "€" + (roomDetails.ElectricityBill.Amount ?? 0).ToString() + ",  " + latestMonthFolder + "/" + latestYearFolder.ToString() : string.Empty
+                        )
+                </MudField>
+                <MudField Label="Last Month Water bill" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.WaterDrop" AdornmentColor="Color.Primary" OnAdornmentClick="ViewWaterBill">
+
+                    @(
+                        latestYearFolder != 0 ? "€" + (roomDetails.WaterBill.Amount ?? 0).ToString() + "  " + latestMonthFolder + "/" + latestYearFolder.ToString() : string.Empty
+                        )
+                </MudField>
+                <MudField Label="Rent start date" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.CalendarMonth" Adornment="Adornment.End" AdornmentColor="Color.Primary">
+                    @(roomDetails.RentStartDate?.ToString("dd/MMMM/yyyy")??string.Empty)
+                </MudField>
+
+                <MudField Label="Room Type" Variant="Variant.Outlined">
+                    @roomDetails.RoomType
+                </MudField>
+                <MudField Label="Electricity Account Number" Variant="Variant.Outlined">
+                    @roomDetails.ElectricityAccountNumber
+                </MudField>
+                <MudField Label="Water Account Number" Variant="Variant.Outlined">
+                    @roomDetails.WaterAccountNumber
+                </MudField>
+
+                <div style="text-align:center" class="py-2">
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.SystemUpdateAlt" Color="Color.Primary" OnClick="UpdateRoomDetails">Update Room Details</MudButton>
+                </div>
+                <div style="text-align:center" class="py-2">
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.CalendarMonth" Color="Color.Primary" OnClick="OpenMonthlyRentDialog">All Monthly Rents</MudButton>
+                </div>
+                <div class="px-2 py-1">
+                    <MudDatePicker Class="pb-3" Label="Rent Month-Year" @bind-Date="selectedmonthYear" OpenTo="OpenTo.Month" FixDay="1" DateFormat="MMMM/yyyy" />
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.SystemUpdateAlt" Color="Color.Primary" OnClick="UpdateMonthlyRent">Update @(selectedmonthYear?.ToString("MMMM/yyyy")) Rent</MudButton>
+                </div>
+            }
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [Parameter]
+    public string Building { get; set; }
+    [Parameter]
+    public string Room { get; set; }
+
+    bool isLoading = true;
+    string roomPath = string.Empty;
+    string tenantsFolderPath = string.Empty;
+    string tenantsImageFolder = string.Empty;
+    string detailfilesPath = string.Empty;
+    string detailTxtfilePath = string.Empty;
+    string rentDetailfilePath = string.Empty;
+    string yearPath = string.Empty;
+    string monthPath = string.Empty;
+    string rentPaymentPath = string.Empty;
+
+    Stream EBillStream;
+    string EBillImage = string.Empty;
+    string EBillImagePath = string.Empty;
+    Stream WBillStream;
+    string WBillImage = string.Empty;
+    string WBillImagePath = string.Empty;
+
+    Room roomDetails = new();
+    DateTime? selectedmonthYear = DateTime.Now;
+    int latestYearFolder = 0;
+    string latestMonthFolder = string.Empty;
+    Tenant currentTenant = new();
+
+    protected override void OnInitialized()
+    {
+        App.Current.On<Microsoft.Maui.Controls.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
+        if (string.IsNullOrEmpty(mainPath))
+            mainPath = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, ConstantValues.HouseData);
+        var buildingpath = System.IO.Path.Combine(mainPath, Building);
+        roomPath = System.IO.Path.Combine(buildingpath, Room);
+        var dir = GetDirectories(roomPath);
+        tenantsFolderPath = System.IO.Path.Combine(roomPath, ConstantValues.TenantsFolder);
+        tenantsImageFolder = System.IO.Path.Combine(roomPath, ConstantValues.TenantsImagesFolder);
+        if (!dir.Contains(tenantsFolderPath))
+            Directory.CreateDirectory(tenantsFolderPath);
+        if (!dir.Contains(tenantsImageFolder))
+            Directory.CreateDirectory(tenantsImageFolder);
+        detailfilesPath = System.IO.Path.Combine(roomPath, ConstantValues.DetailFiles);
+        detailTxtfilePath = System.IO.Path.Combine(detailfilesPath, ConstantValues.FileNames.DetailsTxtFile);
+        rentDetailfilePath = System.IO.Path.Combine(detailfilesPath, ConstantValues.RentDetails);
+        if (!GetDirectories(detailfilesPath).Contains(rentDetailfilePath))
+            Directory.CreateDirectory(rentDetailfilePath);
+        try
+        {
+            var data = File.ReadAllText(detailTxtfilePath);
+            if (!string.IsNullOrEmpty(data))
+                roomDetails = GenerateRoomModelFromCSV(data);
+        }
+        catch
+        {
+
+        }
+        base.OnInitialized();
+    }
+
+    async void OpenMonthlyRentDialog()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true };
+        var parameters = new DialogParameters();
+        parameters.Add("RoomPathValue", roomPath);
+        var dialog = await DialogSrc.ShowAsync<MonthlyRentDialog>("Monthly Rents", parameters, options);
+        var result = await dialog.Result;
+    }
+    async void UpdateRoomDetails()
+    {
+        var files = GetFiles(detailfilesPath);
+
+        if (!files.Contains(detailTxtfilePath))
+            File.WriteAllText(detailTxtfilePath, "");
+        var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true };
+        var parameters = new DialogParameters();
+        parameters.Add("DetailTxtfilePath", detailTxtfilePath);
+        var dialog = await DialogSrc.ShowAsync<UpdateRoomDetailsDialog>("Update Room Details", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Canceled)
+        {
+            var data = result.Data as Room;
+            var txt = GenerateCSVFromRoomModel(data);
+            File.WriteAllText(detailTxtfilePath, txt);
+            roomDetails = GenerateRoomModelFromCSV(txt);
+            StateHasChanged();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Task.Delay(1000);
+            try
+            {
+                List<int> folders = new();
+                var files = GetDirectories(rentDetailfilePath);
+                double rntBalance = 0;
+                if (files.Any())
+                {
+                    folders = files.Select(x => int.Parse(Path.GetFileNameWithoutExtension(x))).ToList(); //all year folder names
+                    folders = folders.OrderByDescending(x=>x).ToList(); // arrange year folder in descending order
+                    foreach (var eachFolder in folders)
+                    {
+                        var tempYearPath = System.IO.Path.Combine(rentDetailfilePath, eachFolder.ToString()); //each path of year folder
+                        files = GetDirectories(tempYearPath);//get all folders in this year path
+                        if (files.Any())
+                        {
+                            var tempFolders = files.Select(x =>
+                            DateTime.ParseExact(Path.GetFileNameWithoutExtension(x), "MMMM", CultureInfo.CurrentCulture).Month
+                            ).ToList();//get names of each month folders and get numeric value of that month
+                            var newTempFolders = tempFolders.OrderByDescending(x=>x);// arrange months in descending order
+                            foreach (var eachMonth in newTempFolders)
+                            {
+                                var tempMonthPath = files[tempFolders.IndexOf(eachMonth)];
+                                var monthFiles = GetFiles(tempMonthPath);// get all files in each month path
+                                if (monthFiles.Contains(Path.Combine(tempMonthPath, ConstantValues.FileNames.RentTxtFile)))
+                                {
+                                    if (string.IsNullOrEmpty(rentPaymentPath))
+                                    {
+                                        latestMonthFolder = Path.GetFileNameWithoutExtension(tempMonthPath);
+                                        latestYearFolder = eachFolder;
+                                        yearPath = tempYearPath;
+                                        monthPath = tempMonthPath;
+                                        rentPaymentPath = Path.Combine(monthPath, ConstantValues.FileNames.PaymentDetailsTxt);
+                                    }
+                                    if (monthFiles.Contains(Path.Combine(tempMonthPath, ConstantValues.FileNames.PaymentDetailsTxt)))
+                                    {
+                                        var txt = await File.ReadAllTextAsync(Path.Combine(tempMonthPath, ConstantValues.FileNames.PaymentDetailsTxt));
+                                        var rentPaymentDetails = JsonSerializer.Deserialize<RentPaymentDetails>(txt);
+                                        rntBalance += rentPaymentDetails.Balance ?? 0;
+                                        if (rentPaymentDetails.AllPayments.Any())
+                                        {
+                                            var latestPayment = rentPaymentDetails.AllPayments.MaxBy(x => x.PaymentDate);
+                                            if (roomDetails.LastPaidDate == null || roomDetails.LastPaidDate < latestPayment.PaymentDate)
+                                            {
+                                                roomDetails.LastPaidDate = latestPayment.PaymentDate;
+                                                roomDetails.LastPaidAmount = latestPayment.Amount;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+                await GetLatestRentAndBillDetails();
+                GetTenantDetails();
+                UpdateRoomBalance(rntBalance);
+            }
+            catch { }
+            isLoading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    void UpdateRoomBalance(double rntBalance)
+    {
+        roomDetails.Balance = rntBalance + (roomDetails.BorrowedMoney ?? 0);
+    }
+    void GetTenantDetails()
+    {
+        try
+        {
+            var files = GetFiles(tenantsFolderPath);
+            List<string> tenantsGuid = new();
+            if (files.Any())
+            {
+                tenantsGuid = files.Select(x => Path.GetFileNameWithoutExtension(x)).ToList();
+            }
+            List<Tenant> tenants = new();
+            foreach (var tenantTxtFile in tenantsGuid)
+            {
+                var filePath = Path.Combine(tenantsFolderPath, tenantTxtFile + ".txt");
+                if (files.Contains(filePath))
+                {
+                    var tenantDetails = File.ReadAllText(filePath);
+                    try
+                    {
+                        tenants.Add(JsonSerializer.Deserialize<Tenant>(tenantDetails));
+                    }
+                    catch { }
+                }
+            }
+            currentTenant = tenants.FirstOrDefault(x => x.PresentTenant);
+            roomDetails.BorrowedMoney = currentTenant.BorrowedMoney.Sum(x => (x.Amount ?? 0)) - currentTenant.Payments.Sum(x => (x.Amount ?? 0));
+            var last_payment = currentTenant.Payments.OrderByDescending(x => x.PaymentDate).First();
+            if (roomDetails.LastPaidDate == null || roomDetails.LastPaidDate < last_payment.PaymentDate)
+            {
+                roomDetails.LastPaidAmount = last_payment.Amount;
+                roomDetails.LastPaidDate = last_payment.PaymentDate;
+            }
+        }
+        catch
+        {
+        }
+    }
+
+    async Task GetLatestRentAndBillDetails()
+    {
+        var files = GetFiles(monthPath);
+        var filePath = System.IO.Path.Combine(monthPath, ConstantValues.FileNames.RentTxtFile);
+        var paymentDetailsPath = Path.Combine(monthPath, ConstantValues.FileNames.PaymentDetailsTxt);
+
+        var data = File.ReadAllText(filePath);
+        var newRoomDetails = GenerateRoomModelFromRentCSV(data);
+        roomDetails.ElectricityBill.Amount = newRoomDetails.ElectricityBill.Amount ?? 0;
+        roomDetails.WaterBill.Amount = newRoomDetails.WaterBill.Amount ?? 0;
+        EBillImagePath = Path.Combine(monthPath, ConstantValues.FileNames.EbillJpg);
+        WBillImagePath = Path.Combine(monthPath, ConstantValues.FileNames.WbillJpg);
+        if (files.Contains(rentPaymentPath))
+        {
+            try
+            {
+                var txt = await File.ReadAllTextAsync(rentPaymentPath);
+                var rentPaymentDetails = JsonSerializer.Deserialize<RentPaymentDetails>(txt);
+                var paymentDetails = rentPaymentDetails.AllPayments.OrderByDescending(x => x.PaymentDate);
+            }
+            catch
+            {
+
+            }
+        }
+        try
+        {
+            var bytesData = File.ReadAllBytes(EBillImagePath);
+            EBillStream = new MemoryStream(bytesData);
+            EBillImage = await GetImageFromFile(EBillImagePath);
+            roomDetails.ElectricityBill.Image = EBillImage;
+        }
+        catch { }
+        try
+        {
+            var bytesData = File.ReadAllBytes(WBillImagePath);
+            WBillStream = new MemoryStream(bytesData);
+            WBillImage = await GetImageFromFile(WBillImagePath);
+            roomDetails.WaterBill.Image = WBillImage;
+        }
+        catch { }
+    }
+    async void ViewTenants()
+    {
+        isLoading = true;
+        await InvokeAsync(StateHasChanged);
+        await Task.Delay(100);
+        NavMng.NavigateTo($"/{Building}/{Room}/tenants");
+    }
+
+    async void ViewElectricityBill()
+    {
+        if (!string.IsNullOrEmpty(EBillImagePath))
+        {
+            var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true, FullScreen = true };
+            var parameters = new DialogParameters();
+            parameters.Add("ImagePath", EBillImagePath);
+            var dialog = await DialogSrc.ShowAsync<ImageDialog>("Electricity Bill", parameters, options);
+        }
+    }
+
+    async void ViewWaterBill()
+    {
+        if (!string.IsNullOrEmpty(WBillImagePath))
+        {
+            var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true, FullScreen = true };
+            var parameters = new DialogParameters();
+            parameters.Add("ImagePath", WBillImagePath);
+            var dialog = await DialogSrc.ShowAsync<ImageDialog>("Water Bill", parameters, options);
+        }
+    }
+    async void UpdateMonthlyRent()
+    {
+        isLoading = true;
+        await InvokeAsync(StateHasChanged);
+        await Task.Delay(100);
+        NavMng.NavigateTo($"/{Building}/{Room}/{selectedmonthYear?.ToString("MMMM")}/{selectedmonthYear?.ToString("yyyy")}/rent");
+    }
+
+}
