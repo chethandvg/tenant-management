@@ -1,0 +1,227 @@
+@page "/{building}/{roomName}/tenants"
+@inject IDialogService DialogSrc
+@inject ISnackbar _snack
+
+<style>
+    .mud-table-row .mud-table-cell:last-child {
+        border-bottom: 5px solid !important
+    }
+
+    .show-present td {
+        background-color: var(--mud-palette-success) !important;
+    }
+
+</style>
+<PageTitle>Tenants</PageTitle>
+<MudText Typo="Typo.h6">
+    @Building -> @RoomName  Tenants
+</MudText>
+
+<MudGrid>
+    <MudItem xs="12">
+        <MudPaper Elevation="25" Class="pa-2">
+            @if (isLoading)
+            {
+                <MudOverlay Visible="isLoading" DarkBackground="true" Absolute="true">
+                    <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+                </MudOverlay>
+            }
+            else
+            {
+                <MudTable ServerData="@(new Func<TableState, Task<TableData<Tenant>>>(TenantsTable))" @ref="table" Hover=true
+                          RowClassFunc="RowClassFunc" Striped=true>
+                    <ToolBarContent>
+                        <MudText Typo="Typo.h6">Tenants</MudText>
+                        <MudSpacer />
+                        @if (!tenants.Any(x => x.PresentTenant))
+                        {
+                            <MudFab StartIcon="@Icons.Material.Filled.Add" Label="Add Tenant" Color="Color.Primary" OnClick="AddTenant" />
+                        }
+                    </ToolBarContent>
+                    <HeaderContent>
+                        <MudTh>Name </MudTh>
+                        <MudTh>Number of Residents</MudTh>
+                        <MudTh>Start date</MudTh>
+                        <MudTh>End date</MudTh>
+                        <MudTh>Actions</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Room">@context.Name</MudTd>
+                        <MudTd DataLabel="Tenant">@context.NumberOfResidents</MudTd>
+                        <MudTd DataLabel="Balance">@context.StartDate.Value.ToString("dd/MMMM/yyyy")</MudTd>
+                        <MudTd DataLabel="Balance">
+                            @(
+                            context.EndDate.HasValue ? context.EndDate.Value.ToString("dd/MMMM/yyyy") : "-"
+                            )
+                        </MudTd>
+                        <MudTd DataLabel="Actions">
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" OnClick="()=>EditTenatDetails(context.GUID)" />
+                            <MudIconButton Icon="@Icons.Material.Filled.CurrencyRupee" Variant="Variant.Filled" Color="Color.Success" Size="Size.Large" OnClick="()=>BorrowedMoney(context.GUID)" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Error" Size="Size.Large" OnClick="()=>DeleteTenant(context.GUID)" />
+                        </MudTd>
+                    </RowTemplate>
+                    <NoRecordsContent>
+                        <MudText>No Tenants found</MudText>
+                    </NoRecordsContent>
+                    <LoadingContent>
+                        <MudText>Loading...</MudText>
+                    </LoadingContent>
+                </MudTable>
+            }
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+<MudMessageBox @ref="mbox" Title="Warning" CancelText="Cancel">
+    <MessageContent>
+        Deleting can <b><i>not</i></b> be undone!
+    </MessageContent>
+    <YesButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Material.Filled.DeleteForever">Delete!</MudButton>
+    </YesButton>
+</MudMessageBox>
+
+
+@code {
+    [Parameter]
+    public string Building { get; set; }
+    [Parameter]
+    public string RoomName { get; set; }
+
+    MudTable<Tenant> table;
+    List<Tenant> tenants = new();
+    List<string> tenantsGuid = new();
+    bool isLoading = true;
+    string roomPath = string.Empty;
+    string tenantsFolderPath = string.Empty;
+    string tenantsImageFolder = string.Empty;
+    MudMessageBox mbox { get; set; }
+
+    protected override void OnInitialized()
+    {
+        App.Current.On<Microsoft.Maui.Controls.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
+        if (string.IsNullOrEmpty(mainPath))
+            mainPath = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, ConstantValues.HouseData);
+        var buildingpath = System.IO.Path.Combine(mainPath, Building);
+        roomPath = System.IO.Path.Combine(buildingpath, RoomName);
+        var dir = GetDirectories(roomPath);
+        tenantsFolderPath = System.IO.Path.Combine(roomPath, ConstantValues.TenantsFolder);
+        tenantsImageFolder = System.IO.Path.Combine(roomPath, ConstantValues.TenantsImagesFolder);
+        if (!dir.Contains(tenantsFolderPath))
+            Directory.CreateDirectory(tenantsFolderPath);
+        if (!dir.Contains(tenantsImageFolder))
+            Directory.CreateDirectory(tenantsImageFolder);
+        base.OnInitialized();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Task.Delay(100);
+            var tenantFiles = GetFiles(tenantsFolderPath);
+            if (tenantFiles.Any())
+            {
+                tenantsGuid = tenantFiles.Select(x => Path.GetFileNameWithoutExtension(x)).ToList();
+            }
+            isLoading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private string RowClassFunc(Tenant arg, int index)
+    {
+        if (arg.PresentTenant)
+        {
+            return "show-present";
+        }
+        return string.Empty;
+    }
+
+    async void EditTenatDetails(string guid)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true, FullScreen = true };
+        var parameters = new DialogParameters();
+        parameters.Add("TenantsFolderPath", tenantsFolderPath);
+        parameters.Add("TenantsImageFolder", tenantsImageFolder);
+        parameters.Add("TenantGuid", guid);
+        var dialog = await DialogSrc.ShowAsync<AddTenantDialog>("Edit Tenant Details", parameters, options);
+        var result = await dialog.Result;
+        await table.ReloadServerData();
+    }
+    async void DeleteTenant(string guid)
+    {
+        try
+        {
+            bool? result = await mbox.Show();
+            if (result != null && result == true)
+            {
+                var filePath = Path.Combine(tenantsFolderPath, guid + ".txt");
+                File.Delete(filePath);
+                await table.ReloadServerData();
+                await InvokeAsync(StateHasChanged);
+                _snack.Add("Tenant deleted successfully", Severity.Success);
+            }
+        }
+        catch
+        {
+            _snack.Add("Something Went Wrong", Severity.Error);
+        }
+    }
+
+    void BorrowedMoney(string guid)
+    {
+
+    }
+
+    async void AddTenant()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true, FullScreen = true };
+        var parameters = new DialogParameters();
+        parameters.Add("TenantsFolderPath", tenantsFolderPath);
+        parameters.Add("TenantsImageFolder", tenantsImageFolder);
+        parameters.Add("TenantGuid", string.Empty);
+        var dialog = await DialogSrc.ShowAsync<AddTenantDialog>("Add Tenant", parameters, options);
+        var result = await dialog.Result;
+        await table.ReloadServerData();
+    }
+
+    private async Task<TableData<Tenant>> TenantsTable(TableState state)
+    {
+        await InvokeAsync(StateHasChanged);
+        try
+        {
+            var files = GetFiles(tenantsFolderPath);
+            tenantsGuid = new();
+            if (files.Any())
+            {
+                tenantsGuid = files.Select(x => Path.GetFileNameWithoutExtension(x)).ToList();
+            }
+            tenants = new();
+            foreach (var tenantTxtFile in tenantsGuid)
+            {
+                var filePath = Path.Combine(tenantsFolderPath, tenantTxtFile + ".txt");
+                if (files.Contains(filePath))
+                {
+                    var tenantDetails = File.ReadAllText(filePath);
+                    try
+                    {
+                        tenants.Add(JsonSerializer.Deserialize<Tenant>(tenantDetails));
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+
+        }
+        catch
+        {
+        }
+        return new()
+            {
+                Items = tenants,
+                TotalItems = tenants.Count()
+            };
+    }
+}
