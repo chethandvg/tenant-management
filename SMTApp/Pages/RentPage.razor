@@ -318,9 +318,9 @@
             {
                 string newPath = System.IO.Path.Combine(mainPath, result.Data.ToString());
                 Directory.CreateDirectory(newPath);
+                _snack.Add("Building Added successfully", Severity.Success);
             }
             buildings = GetBuildings();
-            _snack.Add("Building Added successfully", Severity.Success);
         }
         catch
         {
