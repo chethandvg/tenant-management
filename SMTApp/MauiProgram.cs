@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.WebView.Maui;
 using Microsoft.Extensions.Logging;
 using MudBlazor.Services;
-//using SMTApp.Data;
 
 namespace SMTApp;
 
@@ -24,7 +23,6 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
         builder.Services.AddMudServices();
-        //builder.Services.AddSingleton<WeatherForecastService>();
 
         return builder.Build();
     }

@@ -178,9 +178,9 @@
             {
                 var txt = File.ReadAllText(Path.Combine(TenantsFolderPath, TenantGuid + ".txt"));
                 tenant = JsonSerializer.Deserialize<Tenant>(txt);
-                var tenatImagePath = Path.Combine(TenantsImageFolder, TenantGuid + ConstantValues.FileNames.TenantJpg);
-                var aadharImagePath = Path.Combine(TenantsImageFolder, TenantGuid + ConstantValues.FileNames.DocJpg);
-                var PanImagePath = Path.Combine(TenantsImageFolder, TenantGuid + ConstantValues.FileNames.OtherJpg);
+                var tenatImagePath = Path.Combine(TenantsImageFolder, TenantGuid + FileNames.TenantJpg);
+                var aadharImagePath = Path.Combine(TenantsImageFolder, TenantGuid + FileNames.DocJpg);
+                var PanImagePath = Path.Combine(TenantsImageFolder, TenantGuid + FileNames.OtherJpg);
                 try
                 {
                     var bytesData = File.ReadAllBytes(tenatImagePath);
@@ -354,19 +354,19 @@
                 try
                 {
                     if (tenantImageStream != null)
-                        SaveImageFile(tenantImageStream, Path.Combine(TenantsImageFolder, tenant.GUID + ConstantValues.FileNames.TenantJpg));
+                        SaveImageFile(tenantImageStream, Path.Combine(TenantsImageFolder, tenant.GUID + FileNames.TenantJpg));
                 }
                 catch { }
                 try
                 {
                     if (tenantDocStream != null)
-                        SaveImageFile(tenantDocStream, Path.Combine(TenantsImageFolder, tenant.GUID + ConstantValues.FileNames.DocJpg));
+                        SaveImageFile(tenantDocStream, Path.Combine(TenantsImageFolder, tenant.GUID + FileNames.DocJpg));
                 }
                 catch { }
                 try
                 {
                     if (tenantOtherStream != null)
-                        SaveImageFile(tenantOtherStream, Path.Combine(TenantsImageFolder, tenant.GUID + ConstantValues.FileNames.OtherJpg));
+                        SaveImageFile(tenantOtherStream, Path.Combine(TenantsImageFolder, tenant.GUID + FileNames.OtherJpg));
                 }
                 catch { }
                 @if (string.IsNullOrEmpty(TenantGuid))

@@ -175,8 +175,6 @@
         var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true, FullScreen = true };
         var parameters = new DialogParameters() { { "TenantFilePath", filePath } };
         var dialog = await DialogSrc.ShowAsync<TenantMoneyDialog>("Borrowed Money", parameters, options);
-        // var result = await dialog.Result;
-        // await table.ReloadServerData();
     }
 
     async void AddTenant()

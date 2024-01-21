@@ -77,7 +77,7 @@
                 foreach (var mnth in newTempFolders)
                 {
                     var tempMonthPath = monthLst[tempFolders.IndexOf(mnth)];
-                    var paymentDetailsPath = Path.Combine(tempMonthPath, ConstantValues.FileNames.PaymentDetailsTxt);
+                    var paymentDetailsPath = Path.Combine(tempMonthPath, FileNames.PaymentDetailsTxt);
                     var balance = GetBalance(paymentDetailsPath);
                     var val = new KeyValuePair<string, double>(
                          Path.GetFileName(tempMonthPath) + "/" + Path.GetFileName(tmpYearPath),

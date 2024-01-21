@@ -23,7 +23,6 @@ static class CommonMethods
                 Directory.CreateDirectory(txtFilesPath);
                 return null;
             }
-            //var latestFile = GetLatestFile(room);
             roomDetails.RoomName = Path.GetFileName(room);
 
             return roomDetails;
@@ -132,10 +131,6 @@ static class CommonMethods
         stream.CopyTo(ms);
         byte[] byteArray = ms.ToArray();
         var b64String = Convert.ToBase64String(byteArray);
-        var imageBytes = Convert.FromBase64String(b64String);
-
-        MemoryStream imageDecodeStream = new(imageBytes);
-        var a = ImageSource.FromStream(() => imageDecodeStream);
         return "data:image/png;base64," + b64String;
     }
 
@@ -158,7 +153,7 @@ static class CommonMethods
         var result = await MediaPicker.PickPhotoAsync();
         return await result.OpenReadAsync();
     }
-    public static async void ShareFilesList(List<ShareFile> files, string title)
+    public static async Task ShareFilesList(List<ShareFile> files, string title)
     {
         await Share.Default.RequestAsync(new ShareMultipleFilesRequest
         {

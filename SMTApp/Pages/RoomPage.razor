@@ -131,7 +131,7 @@
         if (!dir.Contains(tenantsImageFolder))
             Directory.CreateDirectory(tenantsImageFolder);
         detailfilesPath = System.IO.Path.Combine(roomPath, ConstantValues.DetailFiles);
-        detailTxtfilePath = System.IO.Path.Combine(detailfilesPath, ConstantValues.FileNames.DetailsTxtFile);
+        detailTxtfilePath = System.IO.Path.Combine(detailfilesPath, FileNames.DetailsTxtFile);
         rentDetailfilePath = System.IO.Path.Combine(detailfilesPath, ConstantValues.RentDetails);
         if (!GetDirectories(detailfilesPath).Contains(rentDetailfilePath))
             Directory.CreateDirectory(rentDetailfilePath);
@@ -205,7 +205,7 @@
                             {
                                 var tempMonthPath = files[tempFolders.IndexOf(eachMonth)];
                                 var monthFiles = GetFiles(tempMonthPath);// get all files in each month path
-                                if (monthFiles.Contains(Path.Combine(tempMonthPath, ConstantValues.FileNames.RentTxtFile)))
+                                if (monthFiles.Contains(Path.Combine(tempMonthPath, FileNames.RentTxtFile)))
                                 {
                                     if (string.IsNullOrEmpty(rentPaymentPath))
                                     {
@@ -213,11 +213,11 @@
                                         latestYearFolder = eachFolder;
                                         yearPath = tempYearPath;
                                         monthPath = tempMonthPath;
-                                        rentPaymentPath = Path.Combine(monthPath, ConstantValues.FileNames.PaymentDetailsTxt);
+                                        rentPaymentPath = Path.Combine(monthPath, FileNames.PaymentDetailsTxt);
                                     }
-                                    if (monthFiles.Contains(Path.Combine(tempMonthPath, ConstantValues.FileNames.PaymentDetailsTxt)))
+                                    if (monthFiles.Contains(Path.Combine(tempMonthPath, FileNames.PaymentDetailsTxt)))
                                     {
-                                        var txt = await File.ReadAllTextAsync(Path.Combine(tempMonthPath, ConstantValues.FileNames.PaymentDetailsTxt));
+                                        var txt = await File.ReadAllTextAsync(Path.Combine(tempMonthPath, FileNames.PaymentDetailsTxt));
                                         var rentPaymentDetails = JsonSerializer.Deserialize<RentPaymentDetails>(txt);
                                         rntBalance += rentPaymentDetails.Balance ?? 0;
                                         if (rentPaymentDetails.AllPayments.Any())
@@ -291,15 +291,15 @@
     async Task GetLatestRentAndBillDetails()
     {
         var files = GetFiles(monthPath);
-        var filePath = System.IO.Path.Combine(monthPath, ConstantValues.FileNames.RentTxtFile);
-        var paymentDetailsPath = Path.Combine(monthPath, ConstantValues.FileNames.PaymentDetailsTxt);
+        var filePath = System.IO.Path.Combine(monthPath, FileNames.RentTxtFile);
+        var paymentDetailsPath = Path.Combine(monthPath, FileNames.PaymentDetailsTxt);
 
         var data = File.ReadAllText(filePath);
         var newRoomDetails = GenerateRoomModelFromRentCSV(data);
         roomDetails.ElectricityBill.Amount = newRoomDetails.ElectricityBill.Amount ?? 0;
         roomDetails.WaterBill.Amount = newRoomDetails.WaterBill.Amount ?? 0;
-        EBillImagePath = Path.Combine(monthPath, ConstantValues.FileNames.EbillJpg);
-        WBillImagePath = Path.Combine(monthPath, ConstantValues.FileNames.WbillJpg);
+        EBillImagePath = Path.Combine(monthPath, FileNames.EbillJpg);
+        WBillImagePath = Path.Combine(monthPath, FileNames.WbillJpg);
         if (files.Contains(rentPaymentPath))
         {
             try
