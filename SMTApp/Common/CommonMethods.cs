@@ -158,7 +158,7 @@ static class CommonMethods
         var result = await MediaPicker.PickPhotoAsync();
         return await result.OpenReadAsync();
     }
-    public static async void ShareFilesList(List<ShareFile> files, string title)
+    public static async Task ShareFilesList(List<ShareFile> files, string title)
     {
         await Share.Default.RequestAsync(new ShareMultipleFilesRequest
         {
