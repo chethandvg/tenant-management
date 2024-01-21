@@ -47,6 +47,8 @@ Creation of SonarCloud account and connecting to repository (with advanced setti
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+
 
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=chethandvg_tenant-management)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
 
