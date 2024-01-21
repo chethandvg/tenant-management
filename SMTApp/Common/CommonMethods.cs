@@ -131,10 +131,6 @@ static class CommonMethods
         stream.CopyTo(ms);
         byte[] byteArray = ms.ToArray();
         var b64String = Convert.ToBase64String(byteArray);
-        var imageBytes = Convert.FromBase64String(b64String);
-
-        MemoryStream imageDecodeStream = new(imageBytes);
-        var a = ImageSource.FromStream(() => imageDecodeStream);
         return "data:image/png;base64," + b64String;
     }
 
