@@ -1,6 +1,6 @@
 ﻿namespace SMTApp.Common;
 
-internal class FileNames
+internal static class FileNames
 {
     public static readonly string DetailsTxtFile = "Details.txt";
     public static readonly string RentTxtFile = "RentDetails.txt";

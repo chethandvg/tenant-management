@@ -1,6 +1,6 @@
 ﻿namespace SMTApp.Common;
 
-internal class ConstantValues
+internal static class ConstantValues
 {
     public static readonly string DetailFiles = "DetailFiles";
     public static readonly string HouseData = "HouseData";
