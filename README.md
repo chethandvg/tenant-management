@@ -37,6 +37,17 @@ Github used for maintaining ticket system and PR's
 
 ![Alt](https://repobeats.axiom.co/api/embed/8ba1e3a688d2c36dcd99726fb3ccdef50474b534.svg "Repobeats analytics image")
 
+## Metrices
+Creation of SonarCloud account and connecting to repository (with advanced settings) for metric badges:
+
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=bugs)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+
 
 ## Acknowledgements
 
