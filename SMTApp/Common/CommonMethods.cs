@@ -5,7 +5,7 @@ namespace SMTApp.Common;
 
 static class CommonMethods
 {
-    internal static string mainPath = string.Empty;
+    public string mainPath = string.Empty;
 
     /// <summary>
     /// Get complete details of each room

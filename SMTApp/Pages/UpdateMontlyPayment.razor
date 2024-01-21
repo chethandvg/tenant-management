@@ -158,7 +158,7 @@
                 var buildingpath = System.IO.Path.Combine(mainPath, Building);
                 roomPath = System.IO.Path.Combine(buildingpath, Room);
                 detailfilesPath = System.IO.Path.Combine(roomPath, ConstantValues.DetailFiles);
-                detailTxtfilePath = System.IO.Path.Combine(detailfilesPath, ConstantValues.FileNames.DetailsTxtFile);
+                detailTxtfilePath = System.IO.Path.Combine(detailfilesPath, FileNames.DetailsTxtFile);
                 rentDetailfilePath = System.IO.Path.Combine(detailfilesPath, ConstantValues.RentDetails);
                 try
                 {
@@ -184,8 +184,8 @@
                     Directory.CreateDirectory(monthPath);
 
                 var files = GetFiles(monthPath);
-                filePath = System.IO.Path.Combine(monthPath, ConstantValues.FileNames.RentTxtFile);
-                paymentDetailsPath = Path.Combine(monthPath, ConstantValues.FileNames.PaymentDetailsTxt);
+                filePath = System.IO.Path.Combine(monthPath, FileNames.RentTxtFile);
+                paymentDetailsPath = Path.Combine(monthPath, FileNames.PaymentDetailsTxt);
                 if (files.Contains(filePath))
                     displayPaymentBtn = true;
 
@@ -193,8 +193,8 @@
                 roomDetails = GenerateRoomModelFromRentCSV(data);
                 UpdateTotalAmount();
                 UpdateBalanceAmount();
-                EBillImagePath = Path.Combine(monthPath, ConstantValues.FileNames.EbillJpg);
-                WBillImagePath = Path.Combine(monthPath, ConstantValues.FileNames.WbillJpg);
+                EBillImagePath = Path.Combine(monthPath, FileNames.EbillJpg);
+                WBillImagePath = Path.Combine(monthPath, FileNames.WbillJpg);
                 try
                 {
                     var bytesData = File.ReadAllBytes(EBillImagePath);
@@ -313,7 +313,7 @@
         {
             ShareFilesList(new()
             {
-                new ShareFile(Path.Combine(monthPath, ConstantValues.FileNames.EbillJpg))
+                new ShareFile(Path.Combine(monthPath, FileNames.EbillJpg))
             }, "Share Electricity Bill");
         }
         catch
@@ -327,7 +327,7 @@
         {
             ShareFilesList(new()
             {
-                new ShareFile(Path.Combine(monthPath, ConstantValues.FileNames.WbillJpg))
+                new ShareFile(Path.Combine(monthPath, FileNames.WbillJpg))
             }, "Share Water Bills");
         }
         catch
@@ -341,8 +341,8 @@
         {
             ShareFilesList(new()
             {
-                new ShareFile(Path.Combine(monthPath, ConstantValues.FileNames.EbillJpg)),
-                new ShareFile(Path.Combine(monthPath, ConstantValues.FileNames.WbillJpg))
+                new ShareFile(Path.Combine(monthPath, FileNames.EbillJpg)),
+                new ShareFile(Path.Combine(monthPath, FileNames.WbillJpg))
             }, "All Bills");
         }
         catch
@@ -358,13 +358,13 @@
             File.WriteAllText(filePath, txt);
             try
             {
-                SaveImageFile(EBillStream, Path.Combine(monthPath, ConstantValues.FileNames.EbillJpg));
+                SaveImageFile(EBillStream, Path.Combine(monthPath, FileNames.EbillJpg));
 
             }
             catch { }
             try
             {
-                SaveImageFile(WBillStream, Path.Combine(monthPath, ConstantValues.FileNames.WbillJpg));
+                SaveImageFile(WBillStream, Path.Combine(monthPath, FileNames.WbillJpg));
             }
             catch { }
             displayPaymentBtn = true;

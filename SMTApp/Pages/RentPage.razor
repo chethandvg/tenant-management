@@ -231,11 +231,11 @@
                         {
                             var tempMonthPath = files[tempFolders.IndexOf(eachMonth)];
                             var monthFiles = GetFiles(tempMonthPath);// get all files in each month path
-                            if (monthFiles.Contains(Path.Combine(tempMonthPath, ConstantValues.FileNames.RentTxtFile)))
+                            if (monthFiles.Contains(Path.Combine(tempMonthPath, FileNames.RentTxtFile)))
                             {
-                                if (monthFiles.Contains(Path.Combine(tempMonthPath, ConstantValues.FileNames.PaymentDetailsTxt)))
+                                if (monthFiles.Contains(Path.Combine(tempMonthPath, FileNames.PaymentDetailsTxt)))
                                 {
-                                    var txt = await File.ReadAllTextAsync(Path.Combine(tempMonthPath, ConstantValues.FileNames.PaymentDetailsTxt));
+                                    var txt = await File.ReadAllTextAsync(Path.Combine(tempMonthPath, FileNames.PaymentDetailsTxt));
                                     var rentPaymentDetails = JsonSerializer.Deserialize<RentPaymentDetails>(txt);
                                     rntBalance += rentPaymentDetails.Balance ?? 0;
                                     if (rentPaymentDetails.AllPayments.Any())
