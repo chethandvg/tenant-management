@@ -1,0 +1,46 @@
+@startuml
+
+title Component Diagram
+
+package "Front End" {
+    component [Graphic User\nInterface] as GUI
+}
+
+actor User
+
+component [Dot Net Core] as net
+component [Write File] as WF
+component [Read File] as RF
+database "System Files" {
+    [Stored Details] as SR
+} 
+
+component "Backend Logic" as BL
+
+interface "File System" as FS
+
+interface Camera
+interface "Access image files" as files
+
+User --> GUI 
+
+GUI -- net
+BL --( Camera
+BL --( files
+
+
+
+RF --( FS 
+WF --( FS
+FS -- SR
+
+
+net --> BL
+
+BL --> RF
+BL -->WF
+
+
+
+
+@enduml

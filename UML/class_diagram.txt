@@ -1,0 +1,53 @@
+@startuml
+class Building {
+  +BuildingId
+  +Name
+  +Address
+  +Rooms
+}
+
+class Room {
+  +RoomId
+  +BuildingId
+  +Number
+  +Size
+  +Rent
+  +Tenant
+}
+
+class Tenant {
++GUID
++Name
++DocNumber 
++OtherDocNumber
++NumberOfResidents
++PresentTenant
++StartDate
++EndDate 
++BorrowedMoney
++ Payments
+}
+
+class Payment {
+  +PaymentId
+  +TenantId
+  +Amount
+  +Date
+  +Type
+}
+
+class Loan {
+  +LoanId
+  +TenantId
+  +Amount
+  +Date
+  +Payments
+}
+
+
+Building "1" *-- "many" Room : contains
+Room "0..1" -- "1" Tenant : assigned to
+Tenant "1" *-- "many" Payment : makes
+Tenant "1" *-- "many" Loan : borrows
+Loan "1" *-- "many" Payment : repays
+@enduml
