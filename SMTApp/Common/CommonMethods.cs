@@ -23,7 +23,6 @@ static class CommonMethods
                 Directory.CreateDirectory(txtFilesPath);
                 return null;
             }
-            //var latestFile = GetLatestFile(room);
             roomDetails.RoomName = Path.GetFileName(room);
 
             return roomDetails;
