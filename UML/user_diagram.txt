@@ -1,0 +1,28 @@
+@startuml
+left to right direction
+package LandLord {
+actor User
+}
+
+package TenantManagement{
+usecase Balance
+usecase "Tenant Details CRUD operations" as tenant
+usecase "Rental Properties CRUD operations" as rent
+usecase "Payment details CRUD operations" as payment
+usecase "Borrowed money CRUD operations" as loan
+}
+
+package PaymentMonitor{
+usecase "Calculate Remaining Amount" as rem
+}
+
+User --> tenant
+User --> rent
+User --> payment
+User --> loan
+rem --> Balance
+payment --> rem
+loan --> rem
+
+
+@enduml
