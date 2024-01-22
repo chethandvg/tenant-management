@@ -48,6 +48,12 @@ Github used for maintaining ticket system and PR's
 	### GUI Git Client
 	- [Sourcetree](https://www.sourcetreeapp.com/) was used to make git operation much simple and also to get an easy view on previous git operation via various branches.
 
+## UML 
+Unified Modeling Language (UML) diagrams are a visual representation of the structure and behavior of a system. UML diagrams provide a standardized way to communicate the different aspects of a system
+UML Diagrams for this project is created with Planttext (Class, Component and User Diagrams)
+
+&rarr; [PNGs and Planttext-Files](https://github.com/chethandvg/tenant-management/tree/master/UML)
+
 ## Stats
 
 ![Alt](https://repobeats.axiom.co/api/embed/8ba1e3a688d2c36dcd99726fb3ccdef50474b534.svg "Repobeats analytics image")
