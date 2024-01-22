@@ -24,20 +24,20 @@ A **Smart Tenant Management** app is a mobile application that helps landlords a
 	### Required packages for VS 2022
 	- .NET Multi-platform App Ul development ([Installation Procedure](https://dotnet.microsoft.com/en-us/learn/maui/first-app-tutorial/install)).
 	
- ### About
-	Visual Studio 2022 Community edition is a free, fully-featured, and extensible integrated development environment (IDE) for creating modern applications for Android, iOS, Windows, as well as web applications and cloud services. It provides a wide range of tools, services, and features that can help C# or .NET developers to design, develop, test, and deploy their applications more efficiently and effectively.
+	### About
+		Visual Studio 2022 Community edition is a free, fully-featured, and extensible integrated development environment (IDE) for creating modern applications for Android, iOS, Windows, as well as web applications and cloud services. It provides a wide range of tools, services, and features that can help C# or .NET developers to design, develop, test, and deploy their applications more efficiently and effectively.
 
- ### Shortcuts
-	- ```Ctrl + k + d```  Apply Indentation to current file
-	- ```Ctrl + d```  Duplicate Line
-	- ```Ctrl + Shift + w```  Closes all open documents and windows
-	- ```Ctrl + Shift + b```  Builds the current solution
-	- ```Ctrl + Shift + a```  Create new file in selected folder
-	- ```Ctrl + Shift + N```  Creates a new project
-	- ```Ctrl + f```  Search given text 
-	- ```Ctrl + h```  Find & replace text
-	- ```Ctrl + g```  Go to specific line number
-	- ```Ctrl + Tab```  Display a list of open documents, and you can cycle through them by holding down the Ctrl key and pressing Tab repeatedly
+	### Shortcuts
+		- ```Ctrl + k + d```  Apply Indentation to current file
+		- ```Ctrl + d```  Duplicate Line
+		- ```Ctrl + Shift + w```  Closes all open documents and windows
+		- ```Ctrl + Shift + b```  Builds the current solution
+		- ```Ctrl + Shift + a```  Create new file in selected folder
+		- ```Ctrl + Shift + N```  Creates a new project
+		- ```Ctrl + f```  Search given text 
+		- ```Ctrl + h```  Find & replace text
+		- ```Ctrl + g```  Go to specific line number
+		- ```Ctrl + Tab```  Display a list of open documents, and you can cycle through them by holding down the Ctrl key and pressing Tab repeatedly
  
 ## Git
 
