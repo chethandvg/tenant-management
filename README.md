@@ -96,6 +96,20 @@ Creation of SonarCloud account and connecting to repository (with advanced setti
 
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=chethandvg_tenant-management)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
 
+## 11. Functional Programming
+The functional programming points that are f for it's understanding and adding a class for Recipe as learned in Prog. I for java
+
+&rarr; [Final data structures](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/MonthlyRentDialog.razor#L73)
+
+&rarr; [(Side effect free functions](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Common/CommonMethods.cs#L60)
+
+&rarr; [Use closures / anonymous functions](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/AllTenantsPage.razor#L54)
+
+&rarr; [Use of higher-order functions/functions as parameters and return values](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/RentPage.razor#L142)
+
+&rarr; [Functions as parameters and return values](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/RentPage.razor#L169)
+
+
 ## Acknowledgements
 
  - [C# Intro](https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/).
