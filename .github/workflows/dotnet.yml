@@ -20,12 +20,10 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-    
      - name: install extra dependencies
       run: |
-        dotnet workload install maui --source https://aka.ms/dotnet6/nuget/index.json --source https://api.nuget.org/v3/index.json
-         dotnet workload install android ios maccatalyst tvos macos maui wasm-tools --source https://aka.ms/dotnet6/nuget/index.json --source https://api.nuget.org/v3/index.json
-
+        dotnet workload install android
+        dotnet workload install wasm-tools-net6
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
