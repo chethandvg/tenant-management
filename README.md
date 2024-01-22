@@ -59,7 +59,23 @@ Github used for maintaining ticket system and PR's
 Unified Modeling Language (UML) diagrams are a visual representation of the structure and behavior of a system. UML diagrams provide a standardized way to communicate the different aspects of a system
 UML Diagrams for this project is created with Planttext (Class, Component and User Diagrams)
 
-&rarr; [PNGs and Planttext-Files](https://github.com/chethandvg/tenant-management/tree/master/UML)
+- &rarr; [PNGs and Planttext-Files](https://github.com/chethandvg/tenant-management/tree/master/UML)
+
+## CCD
+
+Clean code is a set of principles for writing code that is easy to understand and modify
+These are the few CCD principles used in this project
+
+&rarr; [Dependency injection](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/RentPage.razor#L3)
+
+&rarr; [Exception Handling](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/RentPage.razor#L312)
+
+&rarr; [Doc strings](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Common/CommonMethods.cs#L10)
+
+&rarr; [Explanatory variable names](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/RoomPage.razor#L113)
+
+The below Cheat Sheet gives the list of points that should be followed for upcoming projects 
+&rarr; [Cheat Sheet](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Common/CCD_CheatSheat.md)
 
 ## Stats
 
