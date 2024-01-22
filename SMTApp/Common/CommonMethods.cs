@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace SMTApp.Common;
 
-static class CommonMethods
+public static class CommonMethods
 {
     internal static string mainPath = string.Empty;
 
@@ -31,6 +31,31 @@ static class CommonMethods
         {
             return null;
         }
+    }
+
+    public static List<string> GetFilePaths(string building,string room)
+    {
+        return new List<string>
+        {
+            $"/{building}/{room}/{FileNames.PaymentDetailsTxt}",
+            $"/{building}/{room}/{FileNames.DetailsTxtFile}",
+            $"/{building}/{room}/{FileNames.RentTxtFile}",
+        };
+    }
+    
+    public static List<string> GetBillPaths(string building,string room)
+    {
+        return new List<string>
+        {
+            $"/{building}/{room}/{FileNames.WbillJpg}",
+            $"/{building}/{room}/{FileNames.EbillJpg}",
+        };
+    }
+    
+    public static string GetTenantImagePaths(string building,string room)
+    {
+        return 
+            $"/{building}/{room}/{FileNames.TenantJpg}";
     }
 
     internal static Room GenerateRoomModelFromCSV(string csv)
