@@ -114,6 +114,11 @@ Buid process stats in the guthub is visualized in the below badge
 
 [![.github/workflows/dotnet.yml](https://github.com/chethandvg/tenant-management/actions/workflows/dotnet.yml/badge.svg?branch=develop)](https://github.com/chethandvg/tenant-management/actions/workflows/dotnet.yml)
 
+## Test cases
+Test cases used in this project can be found using below link
+
+&rarr; [Click here](https://github.com/chethandvg/tenant-management/blob/master/SMTTest/UnitTest1.cs)
+
 ## Acknowledgements
 
  - [C# Intro](https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/).
