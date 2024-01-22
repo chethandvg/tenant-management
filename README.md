@@ -48,6 +48,13 @@ Github used for maintaining ticket system and PR's
 	### GUI Git Client
 	- [Sourcetree](https://www.sourcetreeapp.com/) was used to make git operation much simple and also to get an easy view on previous git operation via various branches.
 
+##  Requirements Engineering
+	
+	GitHub board & Jira board is used in this project to record requirements and its progress
+
+&rarr; [Git Board](https://github.com/users/chethandvg/projects/1/views/1)
+&rarr; [Jira Board](https://chethandvg3.atlassian.net/jira/software/projects/KAN/boards/1)
+
 ## UML 
 Unified Modeling Language (UML) diagrams are a visual representation of the structure and behavior of a system. UML diagrams provide a standardized way to communicate the different aspects of a system
 UML Diagrams for this project is created with Planttext (Class, Component and User Diagrams)
