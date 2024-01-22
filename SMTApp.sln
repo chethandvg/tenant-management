@@ -4,6 +4,8 @@ VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMTApp", "SMTApp\SMTApp.csproj", "{99DD83E2-BBF7-4D92-B639-39EEF7463E98}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMTTest", "SMTTest\SMTTest.csproj", "{70D14CB3-8691-43AF-BA4A-F8BE4670FABC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -16,6 +18,10 @@ Global
 		{99DD83E2-BBF7-4D92-B639-39EEF7463E98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99DD83E2-BBF7-4D92-B639-39EEF7463E98}.Release|Any CPU.Build.0 = Release|Any CPU
 		{99DD83E2-BBF7-4D92-B639-39EEF7463E98}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{70D14CB3-8691-43AF-BA4A-F8BE4670FABC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70D14CB3-8691-43AF-BA4A-F8BE4670FABC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70D14CB3-8691-43AF-BA4A-F8BE4670FABC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70D14CB3-8691-43AF-BA4A-F8BE4670FABC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
