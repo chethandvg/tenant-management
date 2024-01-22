@@ -59,7 +59,23 @@ Github used for maintaining ticket system and PR's
 Unified Modeling Language (UML) diagrams are a visual representation of the structure and behavior of a system. UML diagrams provide a standardized way to communicate the different aspects of a system
 UML Diagrams for this project is created with Planttext (Class, Component and User Diagrams)
 
-&rarr; [PNGs and Planttext-Files](https://github.com/chethandvg/tenant-management/tree/master/UML)
+- &rarr; [PNGs and Planttext-Files](https://github.com/chethandvg/tenant-management/tree/master/UML)
+
+## CCD
+
+Clean code is a set of principles for writing code that is easy to understand and modify
+These are the few CCD principles used in this project
+
+&rarr; [Dependency injection](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/RentPage.razor#L3)
+
+&rarr; [Exception Handling](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/RentPage.razor#L312)
+
+&rarr; [Doc strings](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Common/CommonMethods.cs#L10)
+
+&rarr; [Explanatory variable names](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/RoomPage.razor#L113)
+
+The below Cheat Sheet gives the list of points that should be followed for upcoming projects 
+&rarr; [Cheat Sheet](https://github.com/chethandvg/tenant-management/blob/master/CCD_CheatSheat.md)
 
 ## Stats
 
@@ -79,6 +95,20 @@ Creation of SonarCloud account and connecting to repository (with advanced setti
 
 
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=chethandvg_tenant-management)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+
+## 11. Functional Programming
+The functional programming points that are f for it's understanding and adding a class for Recipe as learned in Prog. I for java
+
+&rarr; [Final data structures](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/MonthlyRentDialog.razor#L73)
+
+&rarr; [(Side effect free functions](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Common/CommonMethods.cs#L60)
+
+&rarr; [Use closures / anonymous functions](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/AllTenantsPage.razor#L54)
+
+&rarr; [Use of higher-order functions/functions as parameters and return values](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/RentPage.razor#L142)
+
+&rarr; [Functions as parameters and return values](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/RentPage.razor#L169)
+
 
 ## Acknowledgements
 
