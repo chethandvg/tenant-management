@@ -23,7 +23,22 @@ A **Smart Tenant Management** app is a mobile application that helps landlords a
  
 	### Required packages for VS 2022
 	- .NET Multi-platform App Ul development ([Installation Procedure](https://dotnet.microsoft.com/en-us/learn/maui/first-app-tutorial/install)).
+	
+ ### About
+	Visual Studio 2022 Community edition is a free, fully-featured, and extensible integrated development environment (IDE) for creating modern applications for Android, iOS, Windows, as well as web applications and cloud services. It provides a wide range of tools, services, and features that can help C# or .NET developers to design, develop, test, and deploy their applications more efficiently and effectively.
 
+ ### Shortcuts
+	- ```Ctrl + k + d```  Apply Indentation to current file
+	- ```Ctrl + d```  Duplicate Line
+	- ```Ctrl + Shift + w```  Closes all open documents and windows
+	- ```Ctrl + Shift + b```  Builds the current solution
+	- ```Ctrl + Shift + a```  Create new file in selected folder
+	- ```Ctrl + Shift + N```  Creates a new project
+	- ```Ctrl + f```  Search given text 
+	- ```Ctrl + h```  Find & replace text
+	- ```Ctrl + g```  Go to specific line number
+	- ```Ctrl + Tab```  Display a list of open documents, and you can cycle through them by holding down the Ctrl key and pressing Tab repeatedly
+ 
 ## Git
 
 Github used for maintaining ticket system and PR's
@@ -37,6 +52,20 @@ Github used for maintaining ticket system and PR's
 
 ![Alt](https://repobeats.axiom.co/api/embed/8ba1e3a688d2c36dcd99726fb3ccdef50474b534.svg "Repobeats analytics image")
 
+## Metrices
+Creation of SonarCloud account and connecting to repository (with advanced settings) for metric badges:
+
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=bugs)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
+
+
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=chethandvg_tenant-management)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
 
 ## Acknowledgements
 
