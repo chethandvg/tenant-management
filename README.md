@@ -96,7 +96,7 @@ Creation of SonarCloud account and connecting to repository (with advanced setti
 
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=chethandvg_tenant-management)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
 
-## 11. Functional Programming
+## Functional Programming
 The functional programming points that are f for it's understanding and adding a class for Recipe as learned in Prog. I for java
 
 &rarr; [Final data structures](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/MonthlyRentDialog.razor#L73)
@@ -109,6 +109,10 @@ The functional programming points that are f for it's understanding and adding a
 
 &rarr; [Functions as parameters and return values](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/RentPage.razor#L169)
 
+## Build Management
+Buid process stats in the guthub is visualized in the below badge
+
+[![.github/workflows/dotnet.yml](https://github.com/chethandvg/tenant-management/actions/workflows/dotnet.yml/badge.svg?branch=develop)](https://github.com/chethandvg/tenant-management/actions/workflows/dotnet.yml)
 
 ## Acknowledgements
 
