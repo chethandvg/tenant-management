@@ -22,7 +22,10 @@ jobs:
         dotnet-version: 6.0.x
     
     - name: install extra dependencies
-      run: dotnet workload install android
+      run: |
+        dotnet workload install android
+        dotnet workload install wasm-tools-net6
+      
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
