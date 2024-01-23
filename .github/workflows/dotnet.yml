@@ -10,7 +10,8 @@ on:
     branches: "*" 
 
 jobs:
-  build:
+  build: 
+
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +20,8 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-     - name: install extra dependencies
+    
+    - name: install extra dependencies
       run: |
         dotnet workload install android
         dotnet workload install wasm-tools-net6
