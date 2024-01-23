@@ -70,6 +70,22 @@ UML Diagrams for this project is created with Planttext (Class, Component and Us
 
 - &rarr; [PNGs and Planttext-Files](https://github.com/chethandvg/tenant-management/tree/master/UML)
 
+## Analysis Checklist
+
+Checklist to standardize analysis for statup project in the future:
+- [x] (Goals and Objectives)
+- [x] (Targeted Audience)
+- [x] (Market Research)
+- [x] (Technical upgrades)
+- [x] (Technical Resource Requirement)
+- [x] (Risk Assessment)
+- [x] (Timeline)
+- [x] (Security)
+- [x] (Budget Required)
+
+Explantion for the above checklist can be found  using below link
+- &rarr; [PNGs and Planttext-Files](https://github.com/chethandvg/tenant-management/tree/master/Analysis.pdf)
+
 ## CCD
 
 Clean code is a set of principles for writing code that is easy to understand and modify
@@ -116,7 +132,7 @@ The functional programming points that are f for it's understanding and adding a
 &rarr; [Functions as parameters and return values](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/RentPage.razor#L169)
 
 ## Build Management
-Buid process stats in the guthub is visualized in the below badge
+Buid process stats in the github is visualized in the below badge
 
 [![.github/workflows/dotnet.yml](https://github.com/chethandvg/tenant-management/actions/workflows/dotnet.yml/badge.svg?branch=develop)](https://github.com/chethandvg/tenant-management/actions/workflows/dotnet.yml)
 
