@@ -24,8 +24,7 @@ jobs:
     - name: install extra dependencies
       run: |
         dotnet workload install maui --source https://api.nuget.org/v3/index.json
-    - name: Build MAUI Mobile app
-        shell: pwsh
+    - name: Build MAUI Mobile app 
         run: |
           dotnet build ${{inputs.csproj}} -bl:mobile.binlog
     - name: Build
