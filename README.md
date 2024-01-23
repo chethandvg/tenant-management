@@ -99,6 +99,8 @@ These are the few CCD principles used in this project
 
 &rarr; [Explanatory variable names](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/RoomPage.razor#L113)
 
+&rarr; [Test Cases]([https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/RoomPage.razor#L113](https://github.com/chethandvg/tenant-management/blob/master/SMTTest/UnitTest1.cs))
+
 The below Cheat Sheet gives the list of points that should be followed for upcoming projects 
 &rarr; [Cheat Sheet](https://github.com/chethandvg/tenant-management/blob/master/CCD_CheatSheat.md)
 
