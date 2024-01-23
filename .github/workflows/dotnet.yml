@@ -1,0 +1,37 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: "*" 
+  workflow_call:
+    inputs:
+      csproj:
+        required: true
+        type: string
+
+jobs:
+  build: 
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    
+    - name: install extra dependencies
+      run: |
+        dotnet workload install maui --source https://api.nuget.org/v3/index.json
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build MAUI Mobile app
+        shell: pwsh
+        run: |
+          dotnet build ${{inputs.csproj}} -bl:mobile.binlog
