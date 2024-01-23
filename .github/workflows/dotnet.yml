@@ -23,8 +23,11 @@ jobs:
     
     - name: install extra dependencies
       run: |
-        dotnet workload install android
-        dotnet workload install wasm-tools-net6
+        dotnet workload install maui --source https://api.nuget.org/v3/index.json
+    - name: Build MAUI Mobile app
+        shell: pwsh
+        run: |
+          dotnet build ${{inputs.csproj}} -bl:mobile.binlog
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
