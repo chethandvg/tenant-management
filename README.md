@@ -4,7 +4,7 @@
 
 # Smart Tenant Management
 
-A **Smart Tenant Management** app is a mobile application that helps landlords and property managers manage their rental properties and tenants. It simplifies the process by automating the task of managing rental records and also generates a graph view to understand expense and gain for each property. 
+A **Smart Tenant Management** app is a mobile application that helps landlords and property managers manage their rental properties and tenants. It simplifies the process by automating the task of managing rental records and also generates a graph view to understand the expense and gain for each property. 
 
 
 ## Tech Stack
@@ -19,34 +19,34 @@ A **Smart Tenant Management** app is a mobile application that helps landlords a
 
 ## IDE
 
- - Visual Studio Community 2022 (Version :- 17.7.5).
+ - Visual Studio Community 2022 (Version:- 17.7.5).
  
 	### Required packages for VS 2022
 	- .NET Multi-platform App Ul development ([Installation Procedure](https://dotnet.microsoft.com/en-us/learn/maui/first-app-tutorial/install)).
 	
 	### About
-	- Visual Studio 2022 Community edition is a free, fully-featured, and extensible integrated development environment (IDE) for creating modern applications for Android, iOS, Windows, as well as web applications and cloud services. It provides a wide range of tools, services, and features that can help C# or .NET developers to design, develop, test, and deploy their applications more efficiently and effectively.
+	- Visual Studio 2022 Community edition is a free, fully-featured, and extensible integrated development environment (IDE) for creating modern applications for Android, iOS, and Windows, as well as web applications and cloud services. It provides a wide range of tools, services, and features that can help C# or .NET developers to design, develop, test, and deploy their applications more efficiently and effectively.
 
 	### Shortcuts
-		- ```Ctrl + k + d```  Apply Indentation to current file
-		- ```Ctrl + d```  Duplicate Line
-		- ```Ctrl + Shift + w```  Closes all open documents and windows
-		- ```Ctrl + Shift + b```  Builds the current solution
-		- ```Ctrl + Shift + a```  Create new file in selected folder
-		- ```Ctrl + Shift + N```  Creates a new project
-		- ```Ctrl + f```  Search given text 
-		- ```Ctrl + h```  Find & replace text
-		- ```Ctrl + g```  Go to specific line number
-		- ```Ctrl + Tab```  Display a list of open documents, and you can cycle through them by holding down the Ctrl key and pressing Tab repeatedly
+	- ```Ctrl + k + d```  Apply Indentation to current file
+	- ```Ctrl + d```  Duplicate Line
+	- ```Ctrl + Shift + w```  Closes all open documents and windows
+	- ```Ctrl + Shift + b```  Builds the current solution
+	- ```Ctrl + Shift + a```  Create new file in selected folder
+	- ```Ctrl + Shift + N```  Creates a new project
+	- ```Ctrl + f```  Search given text 
+	- ```Ctrl + h```  Find & replace text
+	- ```Ctrl + g```  Go to specific line number
+	- ```Ctrl + Tab```  Display a list of open documents, and you can cycle through them by holding down the Ctrl key and pressing Tab repeatedly
  
 ## Git
 
-Github used for maintaining ticket system and PR's
+GitHub is used for maintaining ticket systems and PR's
 - [Github board](https://github.com/users/chethandvg/projects/1)
 - [Commit history](https://github.com/chethandvg/tenant-management/pulls)
 
 	### GUI Git Client
-	- [Sourcetree](https://www.sourcetreeapp.com/) was used to make git operation much simple and also to get an easy view on previous git operation via various branches.
+	- [Sourcetree](https://www.sourcetreeapp.com/) was used to make the git operation much simpler and also to get an easy view of previous git operations via various branches.
 	
 	### Stats
 
@@ -54,25 +54,25 @@ Github used for maintaining ticket system and PR's
 
 ##  Requirements Engineering
 	
-	GitHub board & Jira board is used in this project to record requirements and its progress
+GitHub board & Jira board are used in this project to record requirements and progress
 
 &rarr; [Git Board](https://github.com/users/chethandvg/projects/1/views/1)
 &rarr; [Jira Board](https://chethandvg3.atlassian.net/jira/software/projects/KAN/boards/1)
 
-## 3. DDD
+## DDD
 Creation with Miro of Event Storming file and resulting Diagrams and DDD 
 
-&rarr; [PDF-file with Event Storming, Diagram and DDD](https://github.com/chethandvg/tenant-management/tree/master/DDD.pdf)
+&rarr; [PDF-file with Event Storming, Diagram, and DDD](https://github.com/chethandvg/tenant-management/tree/master/DDD.pdf)
 
 ## UML 
 Unified Modeling Language (UML) diagrams are a visual representation of the structure and behavior of a system. UML diagrams provide a standardized way to communicate the different aspects of a system
-UML Diagrams for this project is created with Planttext (Class, Component and User Diagrams)
+UML Diagrams for this project are created with Planttext (Class, Component, and User Diagrams)
 
 - &rarr; [PNGs and Planttext-Files](https://github.com/chethandvg/tenant-management/tree/master/UML)
 
 ## Analysis Checklist
 
-Checklist to standardize analysis for statup project in the future:
+Checklist to standardize analysis for this startup project in the future:
 - [x] (Goals and Objectives)
 - [x] (Targeted Audience)
 - [x] (Market Research)
@@ -83,7 +83,7 @@ Checklist to standardize analysis for statup project in the future:
 - [x] (Security)
 - [x] (Budget Required)
 
-Explantion for the above checklist can be found  using below link
+Explanation for the above checklist can be found  using the below link
 - &rarr; [Analysis](https://github.com/chethandvg/tenant-management/tree/master/Analysis.pdf)
 
 ## CCD
@@ -106,7 +106,7 @@ The below Cheat Sheet gives the list of points that should be followed for upcom
 
 
 ## Metrices
-Creation of SonarCloud account and connecting to repository (with advanced settings) for metric badges:
+Creation of SonarCloud account and connecting to the repository (with advanced settings) for metric badges:
 
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=chethandvg_tenant-management&metric=bugs)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
@@ -121,7 +121,7 @@ Creation of SonarCloud account and connecting to repository (with advanced setti
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=chethandvg_tenant-management)](https://sonarcloud.io/summary/new_code?id=chethandvg_tenant-management)
 
 ## Functional Programming
-The functional programming points that are f for it's understanding and adding a class for Recipe as learned in Prog. I for java
+The functional programming points that are f for its understanding and adding a class for Recipe as learned in Prog. I for java
 
 &rarr; [Final data structures](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/MonthlyRentDialog.razor#L73)
 
@@ -134,12 +134,12 @@ The functional programming points that are f for it's understanding and adding a
 &rarr; [Functions as parameters and return values](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/RentPage.razor#L169)
 
 ## Build Management
-Buid process stats in the github is visualized in the below badge
+Build process stats in GitHub are visualized in the below badge
 
 [![.github/workflows/dotnet.yml](https://github.com/chethandvg/tenant-management/actions/workflows/dotnet.yml/badge.svg?branch=develop)](https://github.com/chethandvg/tenant-management/actions/workflows/dotnet.yml)
 
-## Test cases
-Test cases used in this project can be found using below link
+## Unit Test
+Test cases used in this project can be found using the below link
 
 &rarr; [Click here](https://github.com/chethandvg/tenant-management/blob/master/SMTTest/UnitTest1.cs)
 
@@ -158,7 +158,7 @@ Test cases used in this project can be found using below link
 
 
 ## 🚀 About Me
-Hi there, I am Chethan. I'm a full-stack developer and also student at SRH Berlin University of Applied Sciences. Currently, I am pursuing my Masters in Computer Science | Big Data & Artificial Intelligence. 
+Hi there, I am Chethan. I'm a full-stack developer and also a student at SRH Berlin University of Applied Sciences. Currently, I am pursuing my Masters in Computer Science | Big Data & Artificial Intelligence. 
     
 
 
