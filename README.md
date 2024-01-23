@@ -50,7 +50,7 @@ Github used for maintaining ticket system and PR's
 	
 	### Stats
 
-		![Alt](https://repobeats.axiom.co/api/embed/8ba1e3a688d2c36dcd99726fb3ccdef50474b534.svg "Repobeats analytics image")
+	![Alt](https://repobeats.axiom.co/api/embed/8ba1e3a688d2c36dcd99726fb3ccdef50474b534.svg "Repobeats analytics image")
 
 ##  Requirements Engineering
 	
