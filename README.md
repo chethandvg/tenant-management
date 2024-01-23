@@ -25,7 +25,7 @@ A **Smart Tenant Management** app is a mobile application that helps landlords a
 	- .NET Multi-platform App Ul development ([Installation Procedure](https://dotnet.microsoft.com/en-us/learn/maui/first-app-tutorial/install)).
 	
 	### About
-		Visual Studio 2022 Community edition is a free, fully-featured, and extensible integrated development environment (IDE) for creating modern applications for Android, iOS, Windows, as well as web applications and cloud services. It provides a wide range of tools, services, and features that can help C# or .NET developers to design, develop, test, and deploy their applications more efficiently and effectively.
+	- Visual Studio 2022 Community edition is a free, fully-featured, and extensible integrated development environment (IDE) for creating modern applications for Android, iOS, Windows, as well as web applications and cloud services. It provides a wide range of tools, services, and features that can help C# or .NET developers to design, develop, test, and deploy their applications more efficiently and effectively.
 
 	### Shortcuts
 		- ```Ctrl + k + d```  Apply Indentation to current file
@@ -47,6 +47,10 @@ Github used for maintaining ticket system and PR's
 
 	### GUI Git Client
 	- [Sourcetree](https://www.sourcetreeapp.com/) was used to make git operation much simple and also to get an easy view on previous git operation via various branches.
+	
+	### Stats
+
+		![Alt](https://repobeats.axiom.co/api/embed/8ba1e3a688d2c36dcd99726fb3ccdef50474b534.svg "Repobeats analytics image")
 
 ##  Requirements Engineering
 	
@@ -55,11 +59,32 @@ Github used for maintaining ticket system and PR's
 &rarr; [Git Board](https://github.com/users/chethandvg/projects/1/views/1)
 &rarr; [Jira Board](https://chethandvg3.atlassian.net/jira/software/projects/KAN/boards/1)
 
+## 3. DDD
+Creation with Miro of Event Storming file and resulting Diagrams and DDD 
+
+&rarr; [PDF-file with Event Storming, Diagram and DDD](https://github.com/chethandvg/tenant-management/tree/master/DDD.pdf)
+
 ## UML 
 Unified Modeling Language (UML) diagrams are a visual representation of the structure and behavior of a system. UML diagrams provide a standardized way to communicate the different aspects of a system
 UML Diagrams for this project is created with Planttext (Class, Component and User Diagrams)
 
 - &rarr; [PNGs and Planttext-Files](https://github.com/chethandvg/tenant-management/tree/master/UML)
+
+## Analysis Checklist
+
+Checklist to standardize analysis for statup project in the future:
+- [x] (Goals and Objectives)
+- [x] (Targeted Audience)
+- [x] (Market Research)
+- [x] (Technical upgrades)
+- [x] (Technical Resource Requirement)
+- [x] (Risk Assessment)
+- [x] (Timeline)
+- [x] (Security)
+- [x] (Budget Required)
+
+Explantion for the above checklist can be found  using below link
+- &rarr; [PNGs and Planttext-Files](https://github.com/chethandvg/tenant-management/tree/master/Analysis.pdf)
 
 ## CCD
 
@@ -77,9 +102,6 @@ These are the few CCD principles used in this project
 The below Cheat Sheet gives the list of points that should be followed for upcoming projects 
 &rarr; [Cheat Sheet](https://github.com/chethandvg/tenant-management/blob/master/CCD_CheatSheat.md)
 
-## Stats
-
-![Alt](https://repobeats.axiom.co/api/embed/8ba1e3a688d2c36dcd99726fb3ccdef50474b534.svg "Repobeats analytics image")
 
 ## Metrices
 Creation of SonarCloud account and connecting to repository (with advanced settings) for metric badges:
@@ -110,7 +132,7 @@ The functional programming points that are f for it's understanding and adding a
 &rarr; [Functions as parameters and return values](https://github.com/chethandvg/tenant-management/blob/master/SMTApp/Pages/RentPage.razor#L169)
 
 ## Build Management
-Buid process stats in the guthub is visualized in the below badge
+Buid process stats in the github is visualized in the below badge
 
 [![.github/workflows/dotnet.yml](https://github.com/chethandvg/tenant-management/actions/workflows/dotnet.yml/badge.svg?branch=develop)](https://github.com/chethandvg/tenant-management/actions/workflows/dotnet.yml)
 
