@@ -84,7 +84,7 @@ Checklist to standardize analysis for statup project in the future:
 - [x] (Budget Required)
 
 Explantion for the above checklist can be found  using below link
-- &rarr; [PNGs and Planttext-Files](https://github.com/chethandvg/tenant-management/tree/master/Analysis.pdf)
+- &rarr; [Analysis](https://github.com/chethandvg/tenant-management/tree/master/Analysis.pdf)
 
 ## CCD
 
