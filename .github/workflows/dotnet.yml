@@ -32,5 +32,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build MAUI Mobile app
+        shell: pwsh
         run: |
           dotnet build ${{inputs.csproj}} -bl:mobile.binlog
